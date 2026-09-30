@@ -1,0 +1,2882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Resume Generator · Company-Inspired Themes</title>
+
+<!-- ============================================================
+     APP CHROME STYLES (not exported with the resume)
+     ============================================================ -->
+<style id="appCss">
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#0b1020;color:#e6ecf7;line-height:1.45;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+:focus-visible{outline:2px solid #7aa2ff;outline-offset:2px;border-radius:6px}
+a{color:#9fc0ff}
+h1,h2,h3,h4{margin:0}
+
+/* ---------- App bar ---------- */
+.app-bar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 16px;min-height:56px;
+  background:rgba(11,16,32,.94);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-bottom:1px solid #1b2439;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;letter-spacing:.2px}
+.brand .mark{
+  width:28px;height:28px;border-radius:9px;
+  background:linear-gradient(135deg,#5b8cff,#a855f7);
+  display:grid;place-items:center;font-size:14px;color:#fff;flex:0 0 auto;
+}
+.brand .txt{display:flex;flex-direction:column;line-height:1.1}
+.brand .txt small{font-weight:500;font-size:10.5px;color:#8e9ab5;letter-spacing:.4px}
+.spacer{flex:1 1 auto}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border:1px solid #2a3652;background:#151d2f;color:#dbe4f5;
+  padding:8px 13px;border-radius:10px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;white-space:nowrap;
+  transition:background .18s,transform .12s,border-color .18s,box-shadow .18s,color .18s;
+}
+.btn:hover{background:#1c2740;border-color:#3a4a70}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:linear-gradient(135deg,#4f7cff,#7c4dff);border-color:transparent;color:#fff}
+.btn-primary:hover{background:linear-gradient(135deg,#5f89ff,#8b5cff)}
+.btn-ghost{background:transparent;border-color:#243050}
+.btn-ghost:hover{background:#161f34}
+.btn-danger{background:#2a1620;border-color:#5a2333;color:#ffb3c4}
+.btn-danger:hover{background:#3a1b29}
+.btn-sm{padding:5px 9px;font-size:11.5px;border-radius:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* ---------- Shell ---------- */
+.app-shell{display:flex;align-items:flex-start}
+.builder{
+  flex:0 0 44%;max-width:640px;min-width:340px;
+  height:calc(100vh - 57px);overflow-y:auto;overscroll-behavior:contain;
+  padding:14px 14px 80px;border-right:1px solid #1b2439;background:#0d1322;
+}
+.preview-pane{
+  flex:1 1 auto;min-width:0;
+  height:calc(100vh - 57px);overflow-y:auto;overscroll-behavior:contain;
+  padding:0 18px 90px;background:#e9edf5;
+}
+
+/* ---------- Builder nav ---------- */
+.builder-nav{
+  position:sticky;top:-14px;z-index:20;margin:-14px -14px 12px;padding:12px 14px 10px;
+  background:linear-gradient(180deg,#0d1322 70%,rgba(13,19,34,.75));
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;
+  border-bottom:1px solid #1b2439;
+}
+.nav-chip{
+  border:1px solid #243050;background:#131c2e;color:#a9b8d4;
+  border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:600;
+  cursor:pointer;white-space:nowrap;font-family:inherit;transition:.18s;
+}
+.nav-chip:hover{background:#1a2740;color:#dce6fb;border-color:#35496f}
+
+/* ---------- Cards ---------- */
+.card{
+  background:#111a2b;border:1px solid #1e2941;border-radius:14px;
+  padding:14px;margin-bottom:12px;box-shadow:0 1px 0 rgba(255,255,255,.02);
+}
+.card-title{
+  font-size:13.5px;font-weight:800;letter-spacing:.3px;color:#eaf1ff;
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;
+}
+.card-title .idx{
+  width:20px;height:20px;border-radius:6px;background:#1d2a44;color:#8fb0ff;
+  display:grid;place-items:center;font-size:11px;flex:0 0 auto;
+}
+.hint{font-size:11px;color:#7d8dab;margin:4px 0 8px;line-height:1.4}
+.note-banner{
+  background:#14203a;border:1px solid #24345a;border-radius:12px;padding:10px 12px;
+  font-size:11.5px;color:#a9bcdd;margin-bottom:12px;line-height:1.5;
+}
+
+/* ---------- Fields ---------- */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;min-width:0}
+.field label{font-size:11.5px;font-weight:700;color:#a9b8d4;letter-spacing:.2px}
+.field input,.field textarea,.tagrow input,.tb-select,.custom-input{
+  width:100%;background:#0c1526;border:1px solid #26324d;color:#e8eefc;
+  border-radius:9px;padding:8px 10px;font-size:12.5px;font-family:inherit;
+  transition:border-color .16s,background .16s;resize:vertical;
+}
+.field input::placeholder,.field textarea::placeholder,.tagrow input::placeholder{color:#5a6a88}
+.field input:focus,.field textarea:focus,.tagrow input:focus{
+  outline:none;border-color:#4f7cff;background:#0e1930;
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.check{display:flex;align-items:center;gap:8px;font-size:12px;color:#b9c7e2;font-weight:600;margin:2px 0 10px;cursor:pointer}
+.check input{width:15px;height:15px;accent-color:#5b8cff;cursor:pointer}
+
+/* ---------- Repeater items ---------- */
+.rep-item{
+  border:1px solid #1f2b45;background:#0e1728;border-radius:12px;
+  padding:11px;margin-bottom:9px;
+}
+.rep-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.rep-title{font-size:11.5px;font-weight:800;color:#8fb0ff;letter-spacing:.5px;text-transform:uppercase}
+.add-btn{width:100%;justify-content:center;border-style:dashed}
+
+/* ---------- Tag input ---------- */
+.tagbox{border:1px solid #1f2b45;background:#0e1728;border-radius:11px;padding:9px;margin-bottom:9px}
+.tagbox-label{font-size:11px;font-weight:800;color:#9db2d8;margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chips:empty{display:none}
+.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#1b2a48;border:1px solid #2c4066;color:#cfe0ff;
+  border-radius:999px;padding:3px 5px 3px 10px;font-size:11.5px;font-weight:600;
+  max-width:100%;overflow-wrap:anywhere;
+}
+.chip-x{
+  border:none;background:#2b3f66;color:#dbe8ff;width:16px;height:16px;line-height:1;
+  border-radius:50%;cursor:pointer;font-size:12px;display:grid;place-items:center;
+  padding:0;flex:0 0 auto;font-family:inherit;
+}
+.chip-x:hover{background:#e0556f;color:#fff}
+.tagrow{display:flex;gap:7px}
+.tagrow input{flex:1 1 auto;min-width:0}
+
+/* ---------- Theme panel ---------- */
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:6px}
+.theme-card{
+  border:1px solid #24304c;border-radius:12px;padding:7px;background:#121a2b;
+  cursor:pointer;text-align:left;color:#dbe4f5;font-size:11.5px;font-weight:700;
+  transition:.18s;display:flex;flex-direction:column;gap:6px;font-family:inherit;
+}
+.theme-card:hover{border-color:#3d4f7a;background:#182238;transform:translateY(-1px)}
+.theme-card[aria-pressed="true"]{border-color:#7aa2ff;box-shadow:0 0 0 2px rgba(122,162,255,.25)}
+.theme-swatch{height:24px;border-radius:7px;display:flex;overflow:hidden;border:1px solid rgba(255,255,255,.09)}
+.theme-swatch i{flex:1}
+.custom-panel{margin-top:12px;border-top:1px dashed #24304c;padding-top:10px}
+.custom-panel[hidden]{display:none}
+
+/* ---------- Preview toolbar ---------- */
+.preview-toolbar{
+  position:sticky;top:0;z-index:30;
+  margin:0 -18px 16px;padding:11px 18px;
+  background:rgba(255,255,255,.94);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid #dbe1ec;
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+}
+.tb-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#fff;border:1px solid #d3dae7;color:#1c2438;
+  border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;
+  cursor:pointer;font-family:inherit;white-space:nowrap;transition:.16s;
+}
+.tb-btn:hover{background:#f3f6fc;border-color:#b9c5da}
+.tb-btn.primary{background:#1c2438;border-color:#1c2438;color:#fff}
+.tb-btn.primary:hover{background:#293349}
+.tb-select{
+  width:auto;background:#fff;border:1px solid #d3dae7;color:#1c2438;
+  border-radius:9px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;
+}
+.tb-toggle{
+  display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;
+  color:#1c2438;background:#fff;border:1px solid #d3dae7;border-radius:9px;
+  padding:7px 11px;cursor:pointer;white-space:nowrap;
+}
+.tb-toggle input{accent-color:#4f7cff;width:15px;height:15px;cursor:pointer}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);
+  background:#101827;color:#e8eefc;border:1px solid #2a3category;
+  border:1px solid #2a3652;border-radius:12px;padding:11px 18px;font-size:13px;font-weight:600;
+  box-shadow:0 18px 44px rgba(0,0,0,.5);opacity:0;pointer-events:none;
+  transition:opacity .24s,transform .24s;z-index:200;max-width:min(90vw,520px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Mobile tabs ---------- */
+.mobile-tabs{display:none;gap:6px}
+.mobile-tabs button{
+  border:1px solid #243050;background:#131c2e;color:#a9b8d4;border-radius:9px;
+  padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.mobile-tabs button.active{background:#2b3d63;color:#fff;border-color:#4f7cff}
+
+/* ---------- Mode handling ---------- */
+body[data-mode="resume"] .builder{display:none}
+body[data-mode="resume"] .preview-pane{flex:1 1 100%}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1250px){
+  .builder{flex:0 0 46%;max-width:none;min-width:0}
+}
+@media (max-width:940px){
+  .mobile-tabs{display:flex}
+  .app-shell{display:block}
+  .builder,.preview-pane{height:auto;max-width:none;min-width:0;border-right:none}
+  .builder{padding-bottom:60px}
+  .preview-pane{padding-bottom:60px}
+  body[data-mode="split"][data-mobile-view="builder"] .preview-pane{display:none}
+  body[data-mode="split"][data-mobile-view="preview"] .builder{display:none}
+  body[data-mode="resume"] .builder{display:none}
+  .preview-toolbar{margin:0 -14px 14px;padding:10px 14px}
+  .preview-pane{padding-left:14px;padding-right:14px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .brand .txt small{display:none}
+  .btn{padding:7px 10px;font-size:12px}
+  .tb-btn,.tb-toggle,.tb-select{font-size:11.5px;padding:6px 9px}
+}
+
+/* ---------- Print ---------- */
+@media print{
+  @page{size:A4;margin:10mm}
+  html,body{background:#fff !important;height:auto !important;margin:0 !important;padding:0 !important}
+  .app-bar,.builder,.preview-toolbar,.toast,.mobile-tabs{display:none !important}
+  .app-shell{display:block !important}
+  .preview-pane{
+    height:auto !important;overflow:visible !important;padding:0 !important;
+    background:#fff !important;display:block !important;
+  }
+  #resumeHost{display:block !important}
+  .resume{
+    box-shadow:none !important;border-radius:0 !important;
+    max-width:none !important;width:100% !important;margin:0 !important;overflow:visible !important;
+  }
+  .r-section,.r-item,.exp-item,.proj-item,.edu-item,.diagram,.r-header{
+    break-inside:avoid;page-break-inside:avoid;
+  }
+  .r-name,.r-h2,.r-h3{break-after:avoid;page-break-after:avoid}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+}
+
+/* ---------- Utility ---------- */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+</style>
+
+<!-- ============================================================
+     RESUME DOCUMENT STYLES (exported with the resume)
+     ============================================================ -->
+<style id="resumeCss">
+/* ============ RESUME ROOT ============ */
+.resume{
+  --r-bg:#ffffff; --r-surface:#f6f8fb; --r-text:#151a24; --r-muted:#5b6472;
+  --r-accent:#2f6bff; --r-accent2:#111827; --r-border:#e4e8ef;
+  --r-header-bg:#111827; --r-header-text:#ffffff;
+  --r-chip-bg:#eef3ff; --r-chip-text:#22407f;
+  --r-font:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --r-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+  --r-radius:6px;
+
+  width:100%;max-width:880px;margin:0 auto;
+  background:var(--r-bg);color:var(--r-text);
+  font-family:var(--r-font);font-size:12.4px;line-height:1.5;
+  border-radius:10px;box-shadow:0 12px 44px rgba(15,23,42,.16);
+  overflow-wrap:break-word;word-break:normal;
+  box-sizing:border-box;overflow:hidden;
+}
+.resume *{box-sizing:border-box}
+.resume p{margin:0 0 6px}
+.resume ul{margin:0;padding:0;list-style:none}
+
+/* ============ HEADER ============ */
+.r-header{padding:22px 26px;position:relative}
+.r-head-inner{display:flex;gap:20px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.r-head-left{display:flex;gap:14px;align-items:flex-start;min-width:0;flex:1 1 260px}
+.r-photo{
+  width:78px;height:78px;object-fit:cover;border-radius:var(--r-radius);
+  border:2px solid var(--r-accent);flex:0 0 auto;background:var(--r-surface);
+}
+.r-namebox{min-width:0}
+.r-name{font-size:29px;line-height:1.12;font-weight:800;letter-spacing:-.5px;color:inherit;overflow-wrap:break-word}
+.r-title{
+  margin-top:5px;font-size:12px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;opacity:.88;color:inherit;overflow-wrap:break-word;
+}
+.r-contacts{display:flex;flex-wrap:wrap;gap:5px 15px;font-size:11.4px;max-width:100%}
+.r-head-right{flex:0 1 auto;min-width:0;max-width:100%}
+.r-contact{
+  display:inline-flex;align-items:center;gap:5px;color:inherit;text-decoration:none;
+  max-width:100%;overflow-wrap:anywhere;word-break:break-word;
+}
+.r-contact:hover{text-decoration:underline}
+.r-contact svg{width:12.5px;height:12.5px;flex:0 0 auto;opacity:.85}
+.r-contact-plain{display:inline-block;max-width:100%;overflow-wrap:anywhere}
+
+.resume[data-header="band"] .r-header{background:var(--r-header-bg);color:var(--r-header-text)}
+.resume[data-header="minimal"] .r-header{
+  background:transparent;color:var(--r-text);
+  border-bottom:2px solid var(--r-accent);padding:24px 26px 16px;
+}
+.resume[data-header="left"] .r-header{
+  background:var(--r-bg);color:var(--r-text);border-left:6px solid var(--r-accent);padding:20px 26px;
+}
+.resume[data-header="gradient"] .r-header{
+  background:linear-gradient(120deg,var(--r-accent) 0%,var(--r-accent2) 100%);
+  color:#ffffff;padding:24px 26px;
+}
+.resume[data-header="ats"] .r-header{
+  background:transparent;color:var(--r-text);padding:0 0 10px;border-bottom:1px solid var(--r-text);
+}
+.resume[data-header="ats"] .r-title{opacity:1;letter-spacing:.6px}
+.resume[data-flag="gbar"] .r-header::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:4px;
+  background:linear-gradient(90deg,#4285f4 0 25%,#ea4335 25% 50%,#fbbc05 50% 75%,#34a853 75% 100%);
+}
+.resume[data-flag="gbar"] .r-header{padding-bottom:26px}
+
+/* ============ BODY / LAYOUT ============ */
+.r-body{padding:20px 26px 28px}
+.r-body.r-body-single{display:block}
+.resume[data-layout="sidebar"] .r-body{
+  display:grid;grid-template-columns:minmax(160px,215px) minmax(0,1fr);
+  gap:24px;align-items:start;
+}
+.resume[data-layout="sidebar"] .r-body.r-body-single{grid-template-columns:minmax(0,1fr)}
+.r-col{min-width:0}
+.r-main{min-width:0}
+.r-side{min-width:0}
+
+/* ============ SECTIONS ============ */
+.r-section{margin:0 0 17px}
+.r-section:last-child{margin-bottom:0}
+.r-h2{
+  font-size:11.4px;font-weight:800;letter-spacing:1.15px;text-transform:uppercase;
+  color:var(--r-text);margin:0 0 9px;display:flex;align-items:center;gap:9px;
+  line-height:1.3;
+}
+.resume[data-flag="code"] .r-h2{font-family:var(--r-mono);letter-spacing:.6px}
+.resume[data-divider="bar"] .r-h2::after{
+  content:'';flex:1 1 auto;height:2px;border-radius:2px;
+  background:var(--r-accent);opacity:.55;min-width:16px;
+}
+.resume[data-divider="thin"] .r-h2{border-bottom:1px solid var(--r-border);padding-bottom:6px}
+.resume[data-divider="dashed"] .r-h2{border-bottom:1px dashed var(--r-border);padding-bottom:6px}
+.resume[data-divider="plain"] .r-h2{border-bottom:1px solid var(--r-text);padding-bottom:4px;letter-spacing:.9px}
+.resume[data-divider="dashed"] .r-h2::after{display:none}
+
+.r-para{margin:0 0 6px;font-size:12.2px;line-height:1.55;overflow-wrap:break-word}
+.r-note{font-size:10.6px;color:var(--r-muted);margin:-3px 0 8px;font-style:italic}
+
+/* ============ ITEMS ============ */
+.r-item{margin-bottom:13px;min-width:0}
+.r-item:last-child{margin-bottom:0}
+.r-item-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.r-item-left{min-width:0;flex:1 1 200px}
+.r-item-right{flex:0 0 auto;text-align:right}
+.r-h3{
+  font-size:13.2px;font-weight:800;color:var(--r-text);margin:0 0 2px;
+  line-height:1.3;overflow-wrap:break-word;
+}
+.r-org{font-size:11.8px;font-weight:700;color:var(--r-accent2);overflow-wrap:break-word}
+.r-date{
+  font-size:10.8px;font-weight:700;color:var(--r-muted);white-space:nowrap;
+  font-family:var(--r-mono);letter-spacing:.2px;
+}
+.resume[data-layout="sidebar"] .r-item-head{flex-direction:column;gap:1px}
+.resume[data-layout="sidebar"] .r-item-right{text-align:left}
+
+.r-ul{margin:4px 0 0;padding:0}
+.r-ul li{
+  position:relative;padding-left:14px;margin-bottom:3px;font-size:12.1px;
+  line-height:1.5;overflow-wrap:break-word;
+}
+.r-ul li::before{
+  content:'';position:absolute;left:3px;top:7px;width:4px;height:4px;
+  border-radius:50%;background:var(--r-accent);
+}
+.r-list-plain li{padding-left:0}
+.r-list-plain li::before{display:none}
+
+.r-tech{
+  margin-top:5px;display:flex;flex-wrap:wrap;align-items:center;gap:5px;
+  font-size:10.8px;
+}
+.r-tech-label{font-weight:800;color:var(--r-muted);letter-spacing:.4px;text-transform:uppercase}
+.r-tech-item{
+  background:var(--r-surface);border:1px solid var(--r-border);
+  border-radius:999px;padding:1px 8px;color:var(--r-muted);font-weight:600;
+  max-width:100%;overflow-wrap:anywhere;
+}
+.r-link{
+  display:inline-block;font-size:11px;color:var(--r-accent);text-decoration:none;
+  overflow-wrap:anywhere;word-break:break-word;max-width:100%;
+}
+.r-link:hover{text-decoration:underline}
+
+/* ============ SKILLS ============ */
+.skill-list{display:flex;flex-direction:column;gap:6px}
+.skill-row{display:flex;gap:9px;align-items:flex-start;flex-wrap:wrap;min-width:0}
+.skill-cat{
+  font-size:10.6px;font-weight:800;color:var(--r-muted);letter-spacing:.5px;
+  text-transform:uppercase;flex:0 0 auto;min-width:0;
+}
+.resume[data-layout="sidebar"] .skill-row{flex-direction:column;gap:3px}
+.skill-chips{display:flex;flex-wrap:wrap;gap:4px;min-width:0;flex:1 1 auto}
+.skill-chip{
+  background:var(--r-chip-bg);color:var(--r-chip-text);border-radius:var(--r-radius);
+  padding:1px 7px;font-size:11px;font-weight:600;border:1px solid var(--r-border);
+  max-width:100%;overflow-wrap:anywhere;
+}
+.ats-line{font-size:12.1px;margin:0 0 4px;overflow-wrap:break-word}
+
+/* ============ DIAGRAM ============ */
+.diagram{
+  position:relative;width:100%;height:auto;
+  border:1px solid var(--r-border);background:var(--r-surface);
+  border-radius:8px;padding:10px 12px;margin-top:8px;min-width:0;
+}
+.dg-title{
+  font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--r-muted);margin-bottom:8px;
+}
+.dg-flow{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.dg-node{
+  display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;
+  font-size:10.8px;font-weight:700;padding:3px 10px;border-radius:6px;
+  background:var(--r-chip-bg);color:var(--r-chip-text);
+  border:1px solid var(--r-border);max-width:100%;overflow-wrap:anywhere;
+}
+.dg-note{font-weight:600;opacity:.8;font-size:10px}
+.dg-arrow{font-size:11px;line-height:1.05;color:var(--r-muted);padding-left:15px}
+.dg-branches{
+  display:flex;flex-wrap:wrap;gap:5px;padding-left:22px;margin:3px 0 1px;min-width:0;
+}
+.dg-branch{
+  font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;
+  background:var(--r-bg);border:1px dashed var(--r-border);color:var(--r-muted);
+  max-width:100%;overflow-wrap:anywhere;
+}
+
+/* ============ MISC ============ */
+.r-two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.resume[data-layout="sidebar"] .r-two-col{grid-template-columns:1fr}
+.r-kv{font-size:11.8px;line-height:1.5;overflow-wrap:break-word}
+.r-kv strong{font-weight:800}
+
+@media (max-width:640px){
+  .resume{font-size:12px;border-radius:0}
+  .r-header{padding:18px}
+  .r-body{padding:16px 18px 22px}
+  .resume[data-layout="sidebar"] .r-body{grid-template-columns:1fr;gap:16px}
+  .r-name{font-size:23px}
+  .r-item-head{flex-direction:column;gap:1px}
+  .r-item-right{text-align:left}
+  .r-two-col{grid-template-columns:1fr}
+}
+
+@media print{
+  .resume{box-shadow:none !important;border-radius:0 !important;max-width:none !important;width:100% !important}
+  .resume[data-layout="sidebar"] .r-body{grid-template-columns:minmax(150px,200px) minmax(0,1fr)}
+}
+</style>
+</head>
+
+<body data-mode="split" data-mobile-view="builder">
+
+<!-- ============ APP BAR ============ -->
+<header class="app-bar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true">R</span>
+    <span class="txt">
+      Resume Generator
+      <small>Company-inspired themes · 100% client-side</small>
+    </span>
+  </div>
+
+  <nav class="mobile-tabs" aria-label="Mobile view switch">
+    <button type="button" id="tabBuilder" class="active">Form</button>
+    <button type="button" id="tabPreview">Preview</button>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button type="button" class="btn" id="btnSample">Load Sample Resume</button>
+  <button type="button" class="btn btn-ghost" id="btnSave">Save</button>
+  <button type="button" class="btn btn-ghost" id="btnLoad">Load</button>
+  <button type="button" class="btn btn-danger" id="btnClear">Clear</button>
+  <button type="button" class="btn btn-primary" id="btnGenerate">Generate Resume</button>
+</header>
+
+<!-- ============ SHELL ============ -->
+<div class="app-shell">
+
+  <!-- ---------- BUILDER ---------- -->
+  <aside class="builder" id="builderPane" aria-label="Resume information form">
+    <nav class="builder-nav" id="builderNav" aria-label="Form sections"></nav>
+    <div class="note-banner">
+      Theme names are <strong>inspired-by visual styles</strong> only. This application is not affiliated with,
+      endorsed by, or an official template of any company listed. No company logos or trademarks are used.
+    </div>
+    <div id="builderSections"></div>
+  </aside>
+
+  <!-- ---------- PREVIEW ---------- -->
+  <main class="preview-pane" id="previewPane" aria-label="Resume preview">
+    <div class="preview-toolbar">
+      <button type="button" class="tb-btn primary" id="btnPreviewMode">Preview Mode</button>
+      <button type="button" class="tb-btn" id="btnEditMode">Edit Information</button>
+
+      <label class="tb-toggle" for="atsToggle">
+        <input type="checkbox" id="atsToggle" />
+        ATS-Friendly Mode
+      </label>
+
+      <span class="spacer"></span>
+
+      <label class="sr-only" for="themeSelect">Resume theme</label>
+      <select class="tb-select" id="themeSelect"></select>
+
+      <button type="button" class="tb-btn" id="btnPrint">Print / Export PDF</button>
+      <button type="button" class="tb-btn" id="btnDownload">Download Resume HTML</button>
+    </div>
+
+    <div id="resumeHost"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* ============================================================================
+   RESUME GENERATOR — single-file application
+   Structure:
+     1. Constants & utilities
+     2. Theme definitions
+     3. Technology dictionary
+     4. State management (localStorage)
+     5. Builder form rendering
+     6. Resume rendering
+     7. Technology detection & diagrams
+     8. Events & bootstrap
+   ========================================================================== */
+
+/* ============================================================================
+   1. CONSTANTS & UTILITIES
+   ========================================================================== */
+
+var SANS    = "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+var SERIF   = "Georgia, 'Times New Roman', Times, serif";
+var MONO    = "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace";
+var HUMANIST= "'Trebuchet MS', 'Segoe UI', system-ui, sans-serif";
+var ATSFONT = "Arial, Helvetica, 'Liberation Sans', sans-serif";
+
+var LS_KEY = 'resumeGeneratorState.v1';
+
+var SKILL_CATEGORIES = [
+  'Programming Languages','Backend','Frontend','Databases','Cloud',
+  'AI / ML','DevOps','Frameworks','Tools','Other'
+];
+
+var SECTION_NAV = [
+  { id:'personal',       label:'Personal' },
+  { id:'summary',        label:'Summary' },
+  { id:'skills',         label:'Skills' },
+  { id:'experience',     label:'Experience' },
+  { id:'education',      label:'Education' },
+  { id:'projects',       label:'Projects' },
+  { id:'certifications', label:'Certifications' },
+  { id:'achievements',   label:'Achievements' },
+  { id:'publications',   label:'Publications' },
+  { id:'languages',      label:'Languages' },
+  { id:'custom',         label:'Custom Sections' },
+  { id:'theme',          label:'Theme' }
+];
+
+/* ---------- DOM helpers ---------- */
+
+/** Create an element. Attrs: class, text, html (trusted only), style object,
+ *  event handlers (on*), or any attribute. Children may be nodes or strings. */
+function h(tag, attrs) {
+  var node = document.createElement(tag);
+  var children = Array.prototype.slice.call(arguments, 2);
+  if (attrs) {
+    Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'class') { node.className = v; }
+      else if (k === 'text') { node.textContent = String(v); }
+      else if (k === 'html') { node.innerHTML = v; }        /* trusted constants only */
+      else if (k === 'style' && typeof v === 'object') { Object.assign(node.style, v); }
+      else if (k.indexOf('on') === 0 && typeof v === 'function') {
+        node.addEventListener(k.slice(2).toLowerCase(), v);
+      } else { node.setAttribute(k, v === true ? '' : String(v)); }
+    });
+  }
+  children.flat(Infinity).forEach(function (c) {
+    if (c === null || c === undefined || c === false) return;
+    node.appendChild(
+      (typeof c === 'string' || typeof c === 'number')
+        ? document.createTextNode(String(c))
+        : c
+    );
+  });
+  return node;
+}
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+/** Escape a string for safe textual insertion (used only when textContent is impractical). */
+function esc(s) {
+  return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) {
+    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+  });
+}
+
+/** Return a safe, clickable URL or an empty string. */
+function sanitizeUrl(u) {
+  var s = String(u || '').trim();
+  if (!s) return '';
+  if (/^(https?:|mailto:|tel:)/i.test(s)) return s;
+  if (/^[\w.-]+\.[a-z]{2,}([/?#].*)?$/i.test(s)) return 'https://' + s;
+  if (/^www\./i.test(s)) return 'https://' + s;
+  return '';
+}
+
+/** Trim a URL for display. */
+function prettyUrl(u) {
+  return String(u || '')
+    .replace(/^https?:\/\//i, '')
+    .replace(/^www\./i, '')
+    .replace(/\/$/, '');
+}
+
+function debounce(fn, ms) {
+  var t = null;
+  return function () {
+    var args = arguments, ctx = this;
+    clearTimeout(t);
+    t = setTimeout(function () { fn.apply(ctx, args); }, ms);
+  };
+}
+
+function getPath(obj, path) {
+  return path.split('.').reduce(function (o, k) {
+    return (o === null || o === undefined) ? undefined : o[k];
+  }, obj);
+}
+
+function setPath(obj, path, val) {
+  var parts = path.split('.');
+  var cur = obj;
+  for (var i = 0; i < parts.length - 1; i++) {
+    var k = parts[i];
+    if (cur[k] === null || cur[k] === undefined) cur[k] = {};
+    cur = cur[k];
+  }
+  cur[parts[parts.length - 1]] = val;
+}
+
+function hasText(s) {
+  return typeof s === 'string' && s.trim().length > 0;
+}
+
+/** Split a textarea value into clean lines, stripping common bullet markers. */
+function lines(str) {
+  if (!str) return [];
+  return String(str)
+    .split(/\r?\n/)
+    .map(function (l) { return l.replace(/^\s*[-•*\u2022\u25CF\u2023]\s*/, '').trim(); })
+    .filter(Boolean);
+}
+
+function splitCommas(str) {
+  if (!str) return [];
+  return String(str).split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+}
+
+function dateRange(start, end, current) {
+  var s = hasText(start) ? start.trim() : '';
+  var e = hasText(end) ? end.trim() : '';
+  if (current) return s ? (s + ' – Present') : 'Present';
+  if (s && e) return s + ' – ' + e;
+  return s || e || '';
+}
+
+/* ---------- Colour utilities (for the Custom theme) ---------- */
+function hexToRgb(hex) {
+  var s = String(hex || '').replace('#', '').trim();
+  if (s.length === 3) s = s.split('').map(function (c) { return c + c; }).join('');
+  if (!/^[0-9a-f]{6}$/i.test(s)) s = '4f46e5';
+  return {
+    r: parseInt(s.slice(0, 2), 16),
+    g: parseInt(s.slice(2, 4), 16),
+    b: parseInt(s.slice(4, 6), 16)
+  };
+}
+function rgbToHex(r, g, b) {
+  function c(n) {
+    return Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  }
+  return '#' + c(r) + c(g) + c(b);
+}
+/** percent > 0 lightens toward white, < 0 darkens toward black. */
+function shade(hex, percent) {
+  var c = hexToRgb(hex);
+  var target = percent > 0 ? 255 : 0;
+  var p = Math.min(Math.abs(percent), 100) / 100;
+  return rgbToHex(
+    c.r + (target - c.r) * p,
+    c.g + (target - c.g) * p,
+    c.b + (target - c.b) * p
+  );
+}
+function luminance(hex) {
+  var c = hexToRgb(hex);
+  return (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255;
+}
+function contrastText(hex) {
+  return luminance(hex) > 0.55 ? '#101418' : '#ffffff';
+}
+
+/* ---------- Toast ---------- */
+var toastTimer = null;
+function toast(msg) {
+  var el = $('#toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
+}
+
+/* ---------- Inline SVG icons ---------- */
+var ICONS = {
+  mail:     { stroke: true,  d: ['M3 5.5h18v13H3z', 'M3.4 6.4l8.6 6.6 8.6-6.6'] },
+  phone:    { stroke: true,  d: ['M6.5 3h3l1.6 4-2 1.3a12 12 0 0 0 6.6 6.6l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3z'] },
+  pin:      { stroke: true,  d: ['M12 21.5s7-6.4 7-11.4a7 7 0 1 0-14 0c0 5 7 11.4 7 11.4z', 'M12 12.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z'] },
+  globe:    { stroke: true,  d: ['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z', 'M3.5 9h17', 'M3.5 15h17', 'M12 3c2.5 2.4 3.8 5.4 3.8 9s-1.3 6.6-3.8 9c-2.5-2.4-3.8-5.4-3.8-9s1.3-6.6 3.8-9z'] },
+  linkedin: { stroke: false, d: ['M4.5 9h3v11h-3z', 'M6 4.2a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6z', 'M10.5 9h2.9v1.5c.6-1 1.7-1.8 3.3-1.8 2.5 0 3.6 1.6 3.6 4.3V20h-3v-6c0-1.4-.5-2.3-1.7-2.3-1 0-1.6.7-1.9 1.4-.1.2-.1.6-.1.9V20h-3z'] },
+  github:   { stroke: false, d: ['M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z'] }
+};
+
+function svgIcon(name, size) {
+  var def = ICONS[name];
+  var s = size || 13;
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width', String(s));
+  svg.setAttribute('height', String(s));
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  if (def && def.stroke) {
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '1.7');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+  } else {
+    svg.setAttribute('fill', 'currentColor');
+    svg.setAttribute('stroke', 'none');
+  }
+  (def ? def.d : []).forEach(function (d) {
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', d);
+    svg.appendChild(p);
+  });
+  return svg;
+}
+
+/* ============================================================================
+   2. THEME DEFINITIONS
+   Themes are *inspired-by* visual systems — no logos, no trademarks, no claims
+   of affiliation.
+   ========================================================================== */
+
+var THEMES = {
+
+  amazon: {
+    name: 'Amazon-inspired', layout: 'single', header: 'band', divider: 'bar', radius: '6px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f7f8f9', text:'#0f1111', muted:'#565959', accent:'#ff9900', accent2:'#232f3e',
+            border:'#e3e6e7', headerBg:'#232f3e', headerText:'#ffffff', chipBg:'#fff4e5', chipText:'#7a4a00' }
+  },
+
+  apple: {
+    name: 'Apple-inspired', layout: 'single', header: 'minimal', divider: 'thin', radius: '10px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#fbfbfd', text:'#1d1d1f', muted:'#6e6e73', accent:'#0071e3', accent2:'#1d1d1f',
+            border:'#e8e8ed', headerBg:'#ffffff', headerText:'#1d1d1f', chipBg:'#f5f5f7', chipText:'#1d1d1f' }
+  },
+
+  google: {
+    name: 'Google-inspired', layout: 'single', header: 'minimal', divider: 'bar', radius: '8px', font: SANS, flag: 'gbar',
+    vars: { bg:'#ffffff', surface:'#f8f9fa', text:'#202124', muted:'#5f6368', accent:'#4285f4', accent2:'#202124',
+            border:'#dadce0', headerBg:'#ffffff', headerText:'#202124', chipBg:'#e8f0fe', chipText:'#1a73e8' }
+  },
+
+  microsoft: {
+    name: 'Microsoft-inspired', layout: 'sidebar', header: 'left', divider: 'bar', radius: '6px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f3f6fb', text:'#201f1e', muted:'#605e5c', accent:'#0078d4', accent2:'#005a9e',
+            border:'#e1e6ee', headerBg:'#ffffff', headerText:'#201f1e', chipBg:'#deecf9', chipText:'#004578' }
+  },
+
+  netflix: {
+    name: 'Netflix-inspired', layout: 'single', header: 'band', divider: 'thin', radius: '4px', font: SANS,
+    vars: { bg:'#141414', surface:'#1c1c1c', text:'#f2f2f2', muted:'#a6a6a6', accent:'#e50914', accent2:'#ffffff',
+            border:'#2a2a2a', headerBg:'#0b0b0b', headerText:'#ffffff', chipBg:'#2a1416', chipText:'#ff9298' }
+  },
+
+  meta: {
+    name: 'Meta-inspired', layout: 'sidebar', header: 'gradient', divider: 'thin', radius: '12px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f6f7fb', text:'#050505', muted:'#65676b', accent:'#0866ff', accent2:'#7b3ff2',
+            border:'#e4e6eb', headerBg:'#0866ff', headerText:'#ffffff', chipBg:'#e7f0ff', chipText:'#0a4fc7' }
+  },
+
+  tesla: {
+    name: 'Tesla-inspired', layout: 'single', header: 'band', divider: 'plain', radius: '2px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f4f4f4', text:'#171a20', muted:'#5c5e62', accent:'#cc0000', accent2:'#171a20',
+            border:'#e2e2e2', headerBg:'#171a20', headerText:'#ffffff', chipBg:'#f0f0f0', chipText:'#171a20' }
+  },
+
+  nvidia: {
+    name: 'NVIDIA-inspired', layout: 'single', header: 'band', divider: 'dashed', radius: '4px', font: SANS,
+    vars: { bg:'#0d0d0d', surface:'#151515', text:'#eef4e4', muted:'#9aa88c', accent:'#76b900', accent2:'#d6f5a0',
+            border:'#252525', headerBg:'#000000', headerText:'#ffffff', chipBg:'#1a2408', chipText:'#b6e26a' }
+  },
+
+  ibm: {
+    name: 'IBM-inspired', layout: 'sidebar', header: 'left', divider: 'thin', radius: '2px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f4f4f4', text:'#161616', muted:'#525252', accent:'#0f62fe', accent2:'#161616',
+            border:'#e0e0e0', headerBg:'#ffffff', headerText:'#161616', chipBg:'#edf5ff', chipText:'#0043ce' }
+  },
+
+  oracle: {
+    name: 'Oracle-inspired', layout: 'single', header: 'band', divider: 'bar', radius: '4px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f7f5f4', themeText:'', text:'#1c1c1c', muted:'#5b5b5b', accent:'#c74634', accent2:'#312d2a',
+            border:'#e6e1df', headerBg:'#312d2a', headerText:'#ffffff', chipBg:'#fbeeec', chipText:'#9c3423' }
+  },
+
+  adobe: {
+    name: 'Adobe-inspired', layout: 'single', header: 'left', divider: 'bar', radius: '8px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f7f7f8', text:'#2c2c2c', muted:'#6e6e6e', accent:'#eb1000', accent2:'#2c2c2c',
+            border:'#e6e6e6', headerBg:'#ffffff', headerText:'#2c2c2c', chipBg:'#fff0ee', chipText:'#b60d00' }
+  },
+
+  salesforce: {
+    name: 'Salesforce-inspired', layout: 'sidebar', header: 'band', divider: 'thin', radius: '10px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f3f8fd', text:'#080707', muted:'#54698d', accent:'#00a1e0', accent2:'#032e61',
+            border:'#dce7f1', headerBg:'#032e61', headerText:'#ffffff', chipBg:'#e2f4fd', chipText:'#0070a8' }
+  },
+
+  deloitte: {
+    name: 'Deloitte-inspired', layout: 'sidebar', header: 'left', divider: 'bar', radius: '4px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f6f8f3', text:'#1a1a1a', muted:'#5c6660', accent:'#86bc25', accent2:'#0f5132',
+            border:'#e3e8dd', headerBg:'#ffffff', headerText:'#1a1a1a', chipBg:'#eef7dd', chipText:'#3d6b0d' }
+  },
+
+  accenture: {
+    name: 'Accenture-inspired', layout: 'single', header: 'gradient', divider: 'bar', radius: '8px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f8f5ff', text:'#0a0a0a', muted:'#5f5f6b', accent:'#a100ff', accent2:'#2a0050',
+            border:'#e8e1f5', headerBg:'#a100ff', headerText:'#ffffff', chipBg:'#f4e9ff', chipText:'#7a00c2' }
+  },
+
+  sap: {
+    name: 'SAP-inspired', layout: 'single', header: 'left', divider: 'thin', radius: '6px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f5f6f7', text:'#1d2d3e', muted:'#5a6b7b', accent:'#0a6ed1', accent2:'#0a6ed1',
+            border:'#dfe5ea', headerBg:'#ffffff', headerText:'#1d2d3e', chipBg:'#e8f2fb', chipText:'#085cae' }
+  },
+
+  openai: {
+    name: 'OpenAI-inspired', layout: 'single', header: 'minimal', divider: 'thin', radius: '10px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f7f7f8', text:'#0d0d0d', muted:'#6b6b6b', accent:'#10a37f', accent2:'#0d0d0d',
+            border:'#e5e5e5', headerBg:'#ffffff', headerText:'#0d0d0d', chipBg:'#e8f6f1', chipText:'#0b7a5f' }
+  },
+
+  aws: {
+    name: 'AWS-inspired', layout: 'single', header: 'band', divider: 'bar', radius: '6px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f4f6f9', text:'#16191f', muted:'#5f6b7a', accent:'#ff9900', accent2:'#232f3e',
+            border:'#e2e6ec', headerBg:'#232f3e', headerText:'#ffffff', chipBg:'#fff2df', chipText:'#8a5200' }
+  },
+
+  github: {
+    name: 'GitHub-inspired', layout: 'sidebar', header: 'band', divider: 'thin', radius: '6px', font: SANS, flag: 'code',
+    vars: { bg:'#ffffff', surface:'#f6f8fa', text:'#1f2328', muted:'#59636e', accent:'#0969da', accent2:'#1f2328',
+            border:'#d1d9e0', headerBg:'#0d1117', headerText:'#ffffff', chipBg:'#ddf4ff', chipText:'#0550ae' }
+  },
+
+  linkedin: {
+    name: 'LinkedIn-inspired', layout: 'single', header: 'band', divider: 'bar', radius: '8px', font: SANS,
+    vars: { bg:'#ffffff', surface:'#f3f6f8', text:'#1a1a1a', muted:'#5f6b7a', accent:'#0a66c2', accent2:'#004182',
+            border:'#e0e6ea', headerBg:'#0a66c2', headerText:'#ffffff', chipBg:'#e6f0fa', chipText:'#004182' }
+  }
+};
+
+/* Fallback flat theme used when ATS-Friendly Mode is ON. */
+var ATS_THEME = {
+  name: 'ATS-Friendly', layout: 'single', header: 'ats', divider: 'plain', radius: '0px', font: ATSFONT,
+  vars: {
+    bg:'#ffffff', surface:'#ffffff', text:'#000000', muted:'#333333',
+    accent:'#000000', accent2:'#000000', border:'#000000',
+    headerBg:'#ffffff', headerText:'#000000', chipBg:'#ffffff', chipText:'#000000'
+  }
+};
+
+/* ============================================================================
+   3. TECHNOLOGY DICTIONARY
+   Only technologies the user actually wrote are ever displayed.
+   ========================================================================== */
+
+var TECH_DICT = [
+  /* ---- Languages ---- */
+  { key:'python',     label:'Python',     group:'Programming Languages', re:/\bpython\b/i },
+  { key:'csharp',     label:'C#',         group:'Programming Languages', re:/(^|[^a-z0-9])c#([^a-z0-9]|$)|c-sharp|\bcsharp\b/i },
+  { key:'java',       label:'Java',       group:'Programming Languages', re:/\bjava\b/i },
+  { key:'cpp',        label:'C++',        group:'Programming Languages', re:/c\+\+/i },
+  { key:'javascript', label:'JavaScript', group:'Programming Languages', re:/\bjavascript\b|\bjs\b/i },
+  { key:'typescript', label:'TypeScript', group:'Programming Languages', re:/\btypescript\b/i },
+  { key:'sql',        label:'SQL',        group:'Databases',             re:/\bsql\b/i },
+  { key:'golang',     label:'Go',         group:'Programming Languages', re:/\bgolang\b|\bgo lang(uage)?\b/i },
+  { key:'rust',       label:'Rust',       group:'Programming Languages', re:/\brust\b/i },
+  { key:'kotlin',     label:'Kotlin',     group:'Programming Languages', re:/\bkotlin\b/i },
+  { key:'scala',      label:'Scala',      group:'Programming Languages', re:/\bscala\b/i },
+  { key:'php',        label:'PHP',        group:'Programming Languages', re:/\bphp\b/i },
+  { key:'rlang',      label:'R',          group:'Programming Languages', re:/\br\s+(programming|language)\b/i },
+
+  /* ---- Backend ---- */
+  { key:'dotnet',     label:'.NET',           group:'Backend', re:/\.net\b|dotnet/i },
+  { key:'webapi',     label:'.NET Web API',   group:'Backend', re:/\bweb\s*api\b|\.net\s*web\s*api/i },
+  { key:'fastapi',    label:'FastAPI',        group:'Backend', re:/\bfastapi\b/i },
+  { key:'flask',      label:'Flask',          group:'Backend', re:/\bflask\b/i },
+  { key:'django',     label:'Django',         group:'Backend', re:/\bdjango\b/i },
+  { key:'nodejs',     label:'Node.js',        group:'Backend', re:/\bnode\.?js\b|\bnodejs\b/i },
+  { key:'expressjs',  label:'Express.js',     group:'Backend', re:/\bexpress\.?js\b/i },
+  { key:'spring',     label:'Spring',         group:'Backend', re:/\bspring\s*(boot)?\b/i },
+  { key:'restapi',    label:'REST API',       group:'Backend', re:/\brest\s*api\b|\brestful\b|\brest\b/i },
+  { key:'graphql',    label:'GraphQL',        group:'Backend', re:/\bgraphql\b/i },
+  { key:'grpc',       label:'gRPC',           group:'Backend', re:/\bgrpc\b/i },
+  { key:'websocket',  label:'WebSockets',     group:'Backend', re:/\bwebsockets?\b/i },
+  { key:'microsvc',   label:'Microservices',  group:'Backend', re:/\bmicroservices?\b/i },
+
+  /* ---- Frontend ---- */
+  { key:'react',      label:'React',      group:'Frontend', re:/\breact(\.?js)?\b/i },
+  { key:'angular',    label:'Angular',    group:'Frontend', re:/\bangular\b/i },
+  { key:'vue',        label:'Vue',        group:'Frontend', re:/\bvue(\.?js)?\b/i },
+  { key:'redux',      label:'Redux',      group:'Frontend', re:/\bredux\b/i },
+  { key:'html',       label:'HTML',       group:'Frontend', re:/\bhtml5?\b/i },
+  { key:'css',        label:'CSS',        group:'Frontend', re:/\bcss3?\b|\bscss\b|\bsass\b/i },
+  { key:'tailwind',   label:'Tailwind',   group:'Frontend', re:/\btailwind\b/i },
+  { key:'nextjs',     label:'Next.js',    group:'Frontend', re:/\bnext\.?js\b/i },
+
+  /* ---- Databases ---- */
+  { key:'sqlserver',  label:'SQL Server',     group:'Databases', re:/sql\s*server|\bssms\b|\bt-sql\b/i },
+  { key:'mysql',      label:'MySQL',          group:'Databases', re:/\bmysql\b/i },
+  { key:'postgres',   label:'PostgreSQL',     group:'Databases', re:/\bpostgres(ql)?\b/i },
+  { key:'mongodb',    label:'MongoDB',        group:'Databases', re:/\bmongodb\b|\bmongo\b/i },
+  { key:'dynamodb',   label:'DynamoDB',       group:'Databases', re:/\bdynamodb\b/i },
+  { key:'cosmosdb',   label:'Cosmos DB',      group:'Databases', re:/\bcosmos\s*db\b/i },
+  { key:'cassandra',  label:'Cassandra',      group:'Databases', re:/\bcassandra\b/i },
+  { key:'redis',      label:'Redis',          group:'Databases', re:/\bredis\b/i },
+  { key:'oracledb',   label:'Oracle Database',group:'Databases', re:/\boracle\s*(db|database)\b/i },
+  { key:'sqlite',     label:'SQLite',         group:'Databases', re:/\bsqlite\b/i },
+  { key:'elastic',    label:'Elasticsearch',  group:'Databases', re:/\belastic\s*search\b|\belasticsearch\b/i },
+  { key:'vectordb',   label:'Vector Database',group:'Databases', re:/\bvector\s*(db|database)\b|\bpinecone\b|\bchroma\b|\bfaiss\b|\bweaviate\b|\bpgvector\b/i },
+  { key:'snowflake',  label:'Snowflake',      group:'Databases', re:/\bsnowflake\b/i },
+
+  /* ---- Cloud ---- */
+  { key:'aws',        label:'AWS',                group:'Cloud', re:/\baws\b|amazon\s+web\s+services/i },
+  { key:'s3',         label:'AWS S3',             group:'Cloud', re:/\bs3\b|simple\s+storage\s+service/i },
+  { key:'lambda',     label:'AWS Lambda',         group:'Cloud', re:/\blambda\b/i },
+  { key:'sqs',        label:'AWS SQS',            group:'Cloud', re:/\bsqs\b/i },
+  { key:'sns',        label:'AWS SNS',            group:'Cloud', re:/\bsns\b/i },
+  { key:'ec2',        label:'AWS EC2',            group:'Cloud', re:/\bec2\b/i },
+  { key:'ecs',        label:'AWS ECS',            group:'Cloud', re:/\becs\b/i },
+  { key:'eks',        label:'AWS EKS',            group:'Cloud', re:/\beks\b/i },
+  { key:'apigw',      label:'AWS API Gateway',    group:'Cloud', re:/\bapi\s*gateway\b/i },
+  { key:'cloudwatch', label:'AWS CloudWatch',     group:'Cloud', re:/\bcloudwatch\b/i },
+  { key:'rds',        label:'AWS RDS',            group:'Cloud', re:/\brds\b/i },
+  { key:'bedrock',    label:'AWS Bedrock',        group:'Cloud', re:/\bbedrock\b/i },
+  { key:'iam',        label:'AWS IAM',            group:'Cloud', re:/\biam\b/i },
+  { key:'azure',      label:'Azure',              group:'Cloud', re:/\bazure\b/i },
+  { key:'azfunc',     label:'Azure Functions',    group:'Cloud', re:/azure\s+functions?/i },
+  { key:'blob',       label:'Azure Blob Storage', group:'Cloud', re:/\bblob\s+storage\b|azure\s+blob/i },
+  { key:'azuresql',   label:'Azure SQL',          group:'Cloud', re:/azure\s+sql/i },
+  { key:'azureoai',   label:'Azure OpenAI',       group:'Cloud', re:/azure\s+openai/i },
+  { key:'aisearch',   label:'Azure AI Search',    group:'Cloud', re:/azure\s+ai\s+search|cognitive\s+search/i },
+  { key:'aks',        label:'AKS',                group:'Cloud', re:/\baks\b/i },
+  { key:'appinsights',label:'Application Insights',group:'Cloud', re:/application\s+insights/i },
+  { key:'gcp',        label:'Google Cloud',       group:'Cloud', re:/\bgcp\b|google\s+cloud/i },
+  { key:'cloudrun',   label:'Cloud Run',          group:'Cloud', re:/\bcloud\s+run\b/i },
+  { key:'gke',        label:'GKE',                group:'Cloud', re:/\bgke\b/i },
+  { key:'pubsub',     label:'Pub/Sub',            group:'Cloud', re:/\bpub\/?sub\b/i },
+  { key:'vertexai',   label:'Vertex AI',          group:'Cloud', re:/\bvertex\s*ai\b/i },
+  { key:'cloudstorage',label:'Cloud Storage',     group:'Cloud', re:/\bcloud\s+storage\b/i },
+  { key:'bigquery',   label:'BigQuery',           group:'Cloud', re:/\bbigquery\b/i },
+  { key:'firebase',   label:'Firebase',           group:'Cloud', re:/\bfirebase\b/i },
+  { key:'ibmcloud',   label:'IBM Cloud',          group:'Cloud', re:/\bibm\s+cloud\b/i },
+  { key:'watson',     label:'IBM Watson',         group:'Cloud', re:/\bwatson\b/i },
+  { key:'openshift',  label:'Red Hat OpenShift',  group:'Cloud', re:/\bopenshift\b/i },
+  { key:'oraclecloud',label:'Oracle Cloud',       group:'Cloud', re:/\boracle\s+cloud\b|\boci\b/i },
+  { key:'salesforce', label:'Salesforce',         group:'Cloud', re:/\bsalesforce\b/i },
+  { key:'sap',        label:'SAP',                group:'Cloud', re:/\bsap\b/i },
+  { key:'netlify',    label:'Netlify',            group:'Cloud', re:/\bnetlify\b/i },
+  { key:'vercel',     label:'Vercel',             group:'Cloud', re:/\bvercel\b/i },
+  { key:'heroku',     label:'Heroku',             group:'Cloud', re:/\bheroku\b/i },
+  { key:'render',     label:'Render',             group:'Cloud', re:/\brender\.com\b/i },
+
+  /* ---- DevOps ---- */
+  { key:'docker',     label:'Docker',          group:'DevOps', re:/\bdocker\b/i },
+  { key:'kubernetes', label:'Kubernetes',      group:'DevOps', re:/\bkubernetes\b|\bk8s\b/i },
+  { key:'jenkins',    label:'Jenkins',         group:'DevOps', re:/\bjenkins\b/i },
+  { key:'terraform',  label:'Terraform',       group:'DevOps', re:/\bterraform\b/i },
+  { key:'ansible',    label:'Ansible',         group:'DevOps', re:/\bansible\b/i },
+  { key:'cicd',       label:'CI/CD',           group:'DevOps', re:/\bci\/cd\b|continuous\s+integration/i },
+  { key:'ghactions',  label:'GitHub Actions',  group:'DevOps', re:/github\s+actions/i },
+  { key:'azdevops',   label:'Azure DevOps',    group:'DevOps', re:/azure\s+devops/i },
+  { key:'linux',      label:'Linux',           group:'DevOps', re:/\blinux\b/i },
+  { key:'grafana',    label:'Grafana',         group:'DevOps', re:/\bgrafana\b/i },
+  { key:'prometheus', label:'Prometheus',      group:'DevOps', re:/\bprometheus\b/i },
+
+  /* ---- AI / ML ---- */
+  { key:'llm',        label:'LLMs',               group:'AI / ML', re:/\bllms?\b|large\s+language\s+model/i },
+  { key:'rag',        label:'RAG',                group:'AI / ML', re:/\brag\b|retrieval[- ]augmented/i },
+  { key:'langchain',  label:'LangChain',          group:'AI / ML', re:/\blangchain\b/i },
+  { key:'openai',     label:'OpenAI',             group:'AI / ML', re:/\bopenai\b/i },
+  { key:'gpt',        label:'GPT',                group:'AI / ML', re:/\bgpt-?\d?\b/i },
+  { key:'gemini',     label:'Google Gemini',      group:'AI / ML', re:/\bgemini\b/i },
+  { key:'pytorch',    label:'PyTorch',            group:'AI / ML', re:/\bpytorch\b/i },
+  { key:'tensorflow', label:'TensorFlow',         group:'AI / ML', re:/\btensorflow\b/i },
+  { key:'keras',      label:'Keras',              group:'AI / ML', re:/\bkeras\b/i },
+  { key:'sklearn',    label:'Scikit-learn',       group:'AI / ML', re:/\bscikit-?learn\b|\bsklearn\b/i },
+  { key:'nlp',        label:'NLP',                group:'AI / ML', re:/\bnlp\b|natural\s+language\s+processing/i },
+  { key:'dl',         label:'Deep Learning',      group:'AI / ML', re:/deep\s+learning/i },
+  { key:'ml',         label:'Machine Learning',   group:'AI / ML', re:/machine\s+learning/i },
+  { key:'cv',         label:'Computer Vision',    group:'AI / ML', re:/computer\s+vision/i },
+  { key:'cnn',        label:'CNN',                group:'AI / ML', re:/\bcnn\b|convolutional/i },
+  { key:'lstm',       label:'LSTM',               group:'AI / ML', re:/\blstm\b/i },
+  { key:'gan',        label:'GANs',               group:'AI / ML', re:/\bgans?\b/i },
+  { key:'embeddings', label:'Embeddings',         group:'AI / ML', re:/\bembeddings?\b/i },
+  { key:'prompteng',  label:'Prompt Engineering', group:'AI / ML', re:/prompt\s+engineering/i },
+  { key:'finetune',   label:'Fine-tuning',        group:'AI / ML', re:/fine[- ]tun/i },
+  { key:'huggingface',label:'Hugging Face',       group:'AI / ML', re:/hugging\s?face/i },
+  { key:'vectorsearch',label:'Semantic Search',   group:'AI / ML', re:/vector\s+search|semantic\s+search/i },
+  { key:'ocr',        label:'OCR',                group:'AI / ML', re:/\bocr\b/i },
+  { key:'abbyy',      label:'Abbyy FlexiCapture', group:'AI / ML', re:/\babbyy\b|flexicapture|flexilayout/i },
+  { key:'aifoundry',  label:'AI Foundry',         group:'AI / ML', re:/ai\s+foundry/i },
+  { key:'streamlit',  label:'Streamlit',          group:'AI / ML', re:/\bstreamlit\b/i },
+
+  /* ---- Data ---- */
+  { key:'kafka',      label:'Apache Kafka',   group:'Data', re:/\bkafka\b/i },
+  { key:'spark',      label:'Apache Spark',   group:'Data', re:/\bspark\b|pyspark/i },
+  { key:'hadoop',     label:'Hadoop',         group:'Data', re:/\bhadoop\b/i },
+  { key:'airflow',    label:'Airflow',        group:'Data', re:/\bairflow\b/i },
+  { key:'etl',        label:'ETL',            group:'Data', re:/\betl\b/i },
+
+  /* ---- Tools ---- */
+  { key:'git',        label:'Git',            group:'Tools', re:/\bgit\b/i },
+  { key:'github',     label:'GitHub',         group:'Tools', re:/\bgithub\b/i },
+  { key:'gitlab',     label:'GitLab',         group:'Tools', re:/\bgitlab\b/i },
+  { key:'jira',       label:'Jira',           group:'Tools', re:/\bjira\b/i },
+  { key:'postman',    label:'Postman',        group:'Tools', re:/\bpostman\b/i },
+  { key:'vscode',     label:'VS Code',        group:'Tools', re:/vs\s?code|visual\s+studio\s+code/i },
+  { key:'visualstudio',label:'Visual Studio', group:'Tools', re:/visual\s+studio\b/i },
+  { key:'figma',      label:'Figma',          group:'Tools', re:/\bfigma\b/i },
+  { key:'excel',      label:'Excel / OpenXML',group:'Tools', re:/\bexcel\b|openxml/i },
+  { key:'powerbi',    label:'Power BI',       group:'Tools', re:/power\s?bi/i },
+  { key:'twilio',     label:'Twilio API',     group:'Tools', re:/\btwilio\b/i },
+  { key:'kql',        label:'KQL',            group:'Tools', re:/\bkql\b/i }
+];
+
+/* Fast lookup by label (case-insensitive, trimmed). */
+var TECH_BY_LABEL = {};
+TECH_DICT.forEach(function (t) { TECH_BY_LABEL[t.label.toLowerCase()] = t; });
+
+/* ============================================================================
+   4. STATE MANAGEMENT
+   ========================================================================== */
+
+function emptyState() {
+  var skills = {};
+  SKILL_CATEGORIES.forEach(function (c) { skills[c] = []; });
+  return {
+    meta: {
+      themeId: 'amazon',
+      ats: false,
+      custom: {
+        primary: '#4f46e5', secondary: '#111827', bg: '#ffffff', text: '#151a24',
+        font: 'sans', layout: 'single', divider: 'bar'
+      }
+    },
+    personal: {
+      name: '', title: '', email: '', phone: '', location: '',
+      linkedin: '', github: '', portfolio: '', photo: ''
+    },
+    summary: '',
+    skills: skills,
+    experience: [],
+    education: [],
+    projects: [],
+    certifications: [],
+    achievements: [],
+    publications: [],
+    languages: [],
+    custom: []
+  };
+}
+
+var EXPERIENCE_TEMPLATE = {
+  company: '', title: '', location: '', start: '', end: '',
+  current: false, description: '', achievements: '', technologies: ''
+};
+var EDUCATION_TEMPLATE = {
+  degree: '', university: '', location: '', startYear: '', endYear: '', gpa: '', coursework: ''
+};
+var PROJECT_TEMPLATE = {
+  name: '', description: '', technologies: '', architecture: '', contributions: '', url: ''
+};
+var CUSTOM_TEMPLATE = { title: '', content: '' };
+
+function normalizeArray(arr, template) {
+  if (!Array.isArray(arr)) return [];
+  return arr.map(function (item) {
+    var out = Object.assign({}, template);
+    if (item && typeof item === 'object') {
+      Object.keys(item).forEach(function (k) { out[k] = item[k]; });
+    }
+    return out;
+  });
+}
+
+function normalizeStringArray(arr) {
+  if (!Array.isArray(arr)) return [];
+  return arr.map(function (s) { return typeof s === 'string' ? s : String(s == null ? '' : s); });
+}
+
+function hydrate(o) {
+  var base = emptyState();
+  var src = (o && typeof o === 'object') ? o : {};
+  var out = Object.assign(base, src);
+
+  out.meta = Object.assign({}, base.meta, src.meta || {});
+  out.meta.custom = Object.assign({}, base.meta.custom, (src.meta && src.meta.custom) || {});
+  out.personal = Object.assign({}, base.personal, src.personal || {});
+
+  var mergedSkills = {};
+  SKILL_CATEGORIES.forEach(function (c) {
+    mergedSkills[c] = normalizeStringArray((src.skills && src.skills[c]) || []);
+  });
+  out.skills = mergedSkills;
+
+  out.experience     = normalizeArray(src.experience, EXPERIENCE_TEMPLATE);
+  out.education      = normalizeArray(src.education, EDUCATION_TEMPLATE);
+  out.projects       = normalizeArray(src.projects, PROJECT_TEMPLATE);
+  out.custom         = normalizeArray(src.custom, CUSTOM_TEMPLATE);
+  out.certifications = normalizeStringArray(src.certifications);
+  out.achievements   = normalizeStringArray(src.achievements);
+  out.publications   = normalizeStringArray(src.publications);
+  out.languages      = normalizeStringArray(src.languages);
+  out.summary        = typeof src.summary === 'string' ? src.summary : '';
+
+  if (!THEMES[out.meta.themeId] && out.meta.themeId !== 'custom') out.meta.themeId = 'amazon';
+  return out;
+}
+
+var state = emptyState();
+
+function saveResume(silent) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    if (!silent) toast('Resume saved to this browser.');
+    return true;
+  } catch (e) {
+    if (!silent) toast('Could not save — browser storage is full or unavailable.');
+    return false;
+  }
+}
+
+function loadResume(silent) {
+  try {
+    var raw = localStorage.getItem(LS_KEY);
+    if (!raw) {
+      if (!silent) toast('No saved resume found in this browser.');
+      return false;
+    }
+    var parsed = JSON.parse(raw);
+    state = hydrate(parsed);
+    renderBuilder();
+    renderPreview();
+    syncThemeUI();
+    if (!silent) toast('Saved resume loaded.');
+    return true;
+  } catch (e) {
+    if (!silent) toast('Saved data could not be read.');
+    return false;
+  }
+}
+
+function clearResume() {
+  try { localStorage.removeItem(LS_KEY); } catch (e) { /* ignore */ }
+  state = emptyState();
+  renderBuilder();
+  renderPreview();
+  syncThemeUI();
+  toast('All information cleared.');
+}
+
+/* ============================================================================
+   5. BUILDER FORM RENDERING
+   ========================================================================== */
+
+var onDataChange = debounce(function () {
+  renderPreview();
+  saveResume(true);
+}, 260);
+
+/* ---------- Generic field ---------- */
+function field(labelText, path, type, placeholder, opts) {
+  opts = opts || {};
+  var id = 'f_' + path.replace(/[^a-z0-9]/gi, '_');
+  var wrap = h('div', { class: 'field' + (opts.full ? ' full' : '') });
+  wrap.appendChild(h('label', { for: id, text: labelText }));
+
+  var input;
+  if (type === 'textarea') {
+    input = h('textarea', { id: id, rows: opts.rows || 3, placeholder: placeholder || '' });
+    input.value = getPath(state, path) || '';
+  } else {
+    input = h('input', { id: id, type: type || 'text', placeholder: placeholder || '' });
+    input.value = getPath(state, path) || '';
+  }
+  input.addEventListener('input', function () {
+    setPath(state, path, input.value);
+    onDataChange();
+  });
+  wrap.appendChild(input);
+
+  if (opts.hint) wrap.appendChild(h('p', { class: 'hint', text: opts.hint }));
+  return wrap;
+}
+
+/* ---------- Checkbox field ---------- */
+function checkboxField(labelText, path) {
+  var id = 'c_' + path.replace(/[^a-z0-9]/gi, '_');
+  var wrap = h('label', { class: 'check', for: id });
+  var cb = h('input', { type: 'checkbox', id: id });
+  cb.checked = !!getPath(state, path);
+  cb.addEventListener('change', function () {
+    setPath(state, path, cb.checked);
+    onDataChange();
+  });
+  wrap.appendChild(cb);
+  wrap.appendChild(h('span', { text: labelText }));
+  return wrap;
+}
+
+/* ---------- Card shell ---------- */
+function card(id, title, children) {
+  var c = h('section', { class: 'card', id: 'sec-' + id });
+  var idx = SECTION_NAV.findIndex(function (s) { return s.id === id; }) + 1;
+  c.appendChild(h('h2', { class: 'card-title' },
+    h('span', { class: 'idx', text: String(idx) }),
+    document.createTextNode(title)
+  ));
+  children.filter(Boolean).forEach(function (ch) { c.appendChild(ch); });
+  return c;
+}
+
+/* ---------- Repeater item shell ---------- */
+function repItem(title, bodyChildren, onRemove) {
+  var item = h('div', { class: 'rep-item' });
+  var head = h('div', { class: 'rep-head' });
+  head.appendChild(h('span', { class: 'rep-title', text: title }));
+  var removeBtn = h('button', {
+    type: 'button', class: 'btn btn-danger btn-sm',
+    'aria-label': 'Remove ' + title, text: 'Remove'
+  });
+  removeBtn.addEventListener('click', onRemove);
+  head.appendChild(removeBtn);
+  item.appendChild(head);
+  bodyChildren.filter(Boolean).forEach(function (ch) { item.appendChild(ch); });
+  return item;
+}
+
+/* ---------- Generic repeater ---------- */
+function repeater(container, arr, renderItem, addLabel, factory) {
+  function rebuild() {
+    container.innerHTML = '';
+    arr.forEach(function (item, i) {
+      container.appendChild(renderItem(item, i, rebuild));
+    });
+    var add = h('button', { type: 'button', class: 'btn btn-ghost btn-sm add-btn', text: '+ ' + addLabel });
+    add.addEventListener('click', function () {
+      arr.push(factory());
+      onDataChange();
+      rebuild();
+      var items = container.querySelectorAll('.rep-item');
+      var last = items[items.length - 1];
+      if (last) {
+        var firstInput = last.querySelector('input, textarea');
+        if (firstInput && typeof firstInput.focus === 'function') firstInput.focus();
+      }
+    });
+    container.appendChild(add);
+  }
+  rebuild();
+}
+
+/* ---------- Tag input (skills) ---------- */
+function tagInput(label, getArr) {
+  var wrap = h('div', { class: 'tagbox' });
+  wrap.appendChild(h('div', { class: 'tagbox-label', text: label }));
+  var chips = h('div', { class: 'chips' });
+  var row = h('div', { class: 'tagrow' });
+  var input = h('input', { type: 'text', placeholder: 'Add a skill and press Enter…', 'aria-label': 'Add skill to ' + label });
+  var addBtn = h('button', { type: 'button', class: 'btn btn-ghost btn-sm', text: 'Add' });
+
+  function renderChips() {
+    chips.innerHTML = '';
+    var arr = getArr();
+    arr.forEach(function (skill, i) {
+      var chip = h('span', { class: 'chip' });
+      chip.appendChild(document.createTextNode(skill));
+      var x = h('button', {
+        type: 'button', class: 'chip-x', 'aria-label': 'Remove ' + skill, text: '×'
+      });
+      x.addEventListener('click', function () {
+        arr.splice(i, 1);
+        renderChips();
+        onDataChange();
+      });
+      chip.appendChild(x);
+      chips.appendChild(chip);
+    });
+  }
+
+  function commit() {
+    var v = input.value.trim();
+    if (!v) return;
+    var arr = getArr();
+    v.split(',').map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (s) {
+      if (arr.indexOf(s) === -1) arr.push(s);
+    });
+    input.value = '';
+    renderChips();
+    onDataChange();
+  }
+
+  addBtn.addEventListener('click', commit);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); commit(); }
+  });
+
+  renderChips();
+  row.appendChild(input);
+  row.appendChild(addBtn);
+  wrap.appendChild(chips);
+  wrap.appendChild(row);
+  return wrap;
+}
+
+/* ---------- Simple string list repeater ---------- */
+function simpleListCard(id, title, path, placeholder) {
+  var body = h('div');
+  repeater(body, state[path], function (item, i, rebuild) {
+    var wrap = h('div', { class: 'rep-item' });
+    var head = h('div', { class: 'rep-head' });
+    head.appendChild(h('span', { class: 'rep-title', text: '#' + (i + 1) }));
+    var rm = h('button', { type: 'button', class: 'btn btn-danger btn-sm', 'aria-label': 'Remove entry', text: 'Remove' });
+    rm.addEventListener('click', function () {
+      state[path].splice(i, 1);
+      onDataChange();
+      rebuild();
+    });
+    head.appendChild(rm);
+    wrap.appendChild(head);
+    wrap.appendChild(field('Entry', path + '.' + i, 'text', placeholder));
+    return wrap;
+  }, 'Add entry', function () { return ''; });
+  return card(id, title, [body]);
+}
+
+/* ---------- Personal card ---------- */
+function cardPersonal() {
+  var photoRow = h('div', { class: 'field' });
+  photoRow.appendChild(h('label', { for: 'photoInput', text: 'Profile Photo (optional)' }));
+  var file = h('input', { type: 'file', id: 'photoInput', accept: 'image/*' });
+  file.addEventListener('change', function () {
+    var f = file.files && file.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      resizeImage(String(ev.target.result), 320, function (dataUrl) {
+        state.personal.photo = dataUrl;
+        onDataChange();
+        toast('Photo added.');
+      });
+    };
+    reader.onerror = function () { toast('Could not read that image.'); };
+    reader.readAsDataURL(f);
+  });
+  photoRow.appendChild(file);
+  var clearPhoto = h('button', {
+    type: 'button', class: 'btn btn-ghost btn-sm', style: { marginTop: '7px' },
+    text: 'Remove photo'
+  });
+  clearPhoto.addEventListener('click', function () {
+    state.personal.photo = '';
+    file.value = '';
+    onDataChange();
+    toast('Photo removed.');
+  });
+  photoRow.appendChild(clearPhoto);
+
+  return card('personal', 'Personal Information', [
+    h('div', { class: 'grid-2' },
+      field('Full Name *', 'personal.name', 'text', 'e.g. Ravula Tanishq'),
+      field('Professional Title *', 'personal.title', 'text', 'e.g. Software Development Engineer')
+    ),
+    h('div', { class: 'grid-2' },
+      field('Email', 'personal.email', 'email', 'you@example.com'),
+      field('Phone', 'personal.phone', 'text', '+91 00000 00000')
+    ),
+    field('Location', 'personal.location', 'text', 'City, Country'),
+    h('div', { class: 'grid-2' },
+      field('LinkedIn', 'personal.linkedin', 'text', 'https://linkedin.com/in/…'),
+      field('GitHub', 'personal.github', 'text', 'https://github.com/…')
+    ),
+    field('Portfolio / Website', 'personal.portfolio', 'text', 'https://your-site.com'),
+    photoRow
+  ]);
+}
+
+/* ---------- Summary card ---------- */
+function cardSummary() {
+  return card('summary', 'Professional Summary', [
+    field('Resume Summary / About Me', 'summary', 'textarea', 'A concise paragraph describing your experience and impact.', { rows: 5 }),
+    h('p', { class: 'hint', text: 'Tip: 3–5 sentences focused on scope, scale and measurable outcomes.' })
+  ]);
+}
+
+/* ---------- Skills card ---------- */
+function cardSkills() {
+  var children = [h('p', { class: 'hint', text: 'Type a skill and press Enter (or click Add). You can paste comma-separated values too.' })];
+  SKILL_CATEGORIES.forEach(function (cat) {
+    children.push(tagInput(cat, function () { return state.skills[cat]; }));
+  });
+  return card('skills', 'Skills', children);
+}
+
+/* ---------- Experience card ---------- */
+function cardExperience() {
+  var body = h('div');
+  repeater(body, state.experience, function (exp, i, rebuild) {
+    var p = 'experience.' + i + '.';
+    var heading = exp.title || exp.company || ('Experience ' + (i + 1));
+    return repItem(heading, [
+      h('div', { class: 'grid-2' },
+        field('Company', p + 'company', 'text', 'e.g. Deloitte'),
+        field('Job Title', p + 'title', 'text', 'e.g. Software Developer II')
+      ),
+      h('div', { class: 'grid-3' },
+        field('Location', p + 'location', 'text', 'City, Country'),
+        field('Start Date', p + 'start', 'text', 'e.g. Aug 2024'),
+        field('End Date', p + 'end', 'text', 'e.g. May 2026')
+      ),
+      checkboxField('Currently working here', p + 'current'),
+      field('Description', p + 'description', 'textarea', 'Short paragraph describing the role and scope.', { rows: 3 }),
+      field('Achievements (one per line)', p + 'achievements', 'textarea', 'Built X that reduced Y by Z%', { rows: 5 }),
+      field('Technologies Used (comma separated)', p + 'technologies', 'text', 'e.g. C#, .NET, SQL Server, Azure')
+    ], function () {
+      state.experience.splice(i, 1);
+      onDataChange();
+      rebuild();
+    });
+  }, 'Add work experience', function () { return Object.assign({}, EXPERIENCE_TEMPLATE); });
+  return card('experience', 'Work Experience', [body]);
+}
+
+/* ---------- Education card ---------- */
+function cardEducation() {
+  var body = h('div');
+  repeater(body, state.education, function (edu, i, rebuild) {
+    var p = 'education.' + i + '.';
+    var heading = edu.degree || edu.university || ('Education ' + (i + 1));
+    return repItem(heading, [
+      h('div', { class: 'grid-2' },
+        field('Degree', p + 'degree', 'text', 'e.g. B.E. Computer Science and Engineering'),
+        field('University / Institution', p + 'university', 'text', 'e.g. Vasavi College of Engineering')
+      ),
+      h('div', { class: 'grid-3' },
+        field('Location', p + 'location', 'text', 'City, Country'),
+        field('Start Year', p + 'startYear', 'text', 'e.g. 2020'),
+        field('End Year', p + 'endYear', 'text', 'e.g. 2024')
+      ),
+      field('GPA / Percentage', p + 'gpa', 'text', 'e.g. 9.2 CGPA'),
+      field('Relevant Coursework', p + 'coursework', 'textarea', 'Data Structures, DBMS, Operating Systems…', { rows: 2 })
+    ], function () {
+      state.education.splice(i, 1);
+      onDataChange();
+      rebuild();
+    });
+  }, 'Add education', function () { return Object.assign({}, EDUCATION_TEMPLATE); });
+  return card('education', 'Education', [body]);
+}
+
+/* ---------- Projects card ---------- */
+function cardProjects() {
+  var body = h('div');
+  repeater(body, state.projects, function (pr, i, rebuild) {
+    var p = 'projects.' + i + '.';
+    var heading = pr.name || ('Project ' + (i + 1));
+    return repItem(heading, [
+      field('Project Name', p + 'name', 'text', 'e.g. AI Mart: Agentic Bot'),
+      field('Description', p + 'description', 'textarea', 'What the project does and why it matters.', { rows: 3 }),
+      field('Technologies (comma separated)', p + 'technologies', 'text', 'e.g. Python, LangChain, Streamlit'),
+      field('Architecture', p + 'architecture', 'textarea', 'High-level architecture: client → API → services → data.', { rows: 2 }),
+      field('Key Contributions (one per line)', p + 'contributions', 'textarea', 'Implemented X which improved Y by Z%', { rows: 4 }),
+      field('GitHub / Demo URL', p + 'url', 'text', 'https://github.com/…')
+    ], function () {
+      state.projects.splice(i, 1);
+      onDataChange();
+      rebuild();
+    });
+  }, 'Add project', function () { return Object.assign({}, PROJECT_TEMPLATE); });
+  return card('projects', 'Projects', [body]);
+}
+
+/* ---------- Custom sections card ---------- */
+function cardCustom() {
+  var body = h('div');
+  body.appendChild(h('p', {
+    class: 'hint',
+    text: 'Add your own sections such as Leadership, Open Source, Hackathons, Awards, Volunteer Experience, Research or Interests.'
+  }));
+  repeater(body, state.custom, function (cs, i, rebuild) {
+    var p = 'custom.' + i + '.';
+    return repItem(cs.title || ('Custom Section ' + (i + 1)), [
+      field('Section Title', p + 'title', 'text', 'e.g. Leadership'),
+      field('Entries (one per line)', p + 'content', 'textarea', 'Each line becomes a bullet point.', { rows: 4 })
+    ], function () {
+      state.custom.splice(i, 1);
+      onDataChange();
+      rebuild();
+    });
+  }, 'Add custom section', function () { return Object.assign({}, CUSTOM_TEMPLATE); });
+  return card('custom', 'Custom Sections', [body]);
+}
+
+/* ---------- Theme card ---------- */
+var themeCardEls = {};
+
+function cardTheme() {
+  var grid = h('div', { class: 'theme-grid', role: 'group', 'aria-label': 'Resume themes' });
+
+  Object.keys(THEMES).forEach(function (id) {
+    var t = THEMES[id];
+    var btn = h('button', {
+      type: 'button', class: 'theme-card', 'data-theme': id,
+      'aria-pressed': state.meta.themeId === id ? 'true' : 'false'
+    });
+    var sw = h('span', { class: 'theme-swatch' });
+    sw.appendChild(h('i', { style: { background: t.vars.headerBg === '#ffffff' ? t.vars.accent : t.vars.headerBg } }));
+    sw.appendChild(h('i', { style: { background: t.vars.accent } }));
+    sw.appendChild(h('i', { style: { background: t.vars.bg } }));
+    btn.appendChild(sw);
+    btn.appendChild(h('span', { text: t.name }));
+    btn.addEventListener('click', function () { selectTheme(id); });
+    themeCardEls[id] = btn;
+    grid.appendChild(btn);
+  });
+
+  /* Custom theme card */
+  var cBtn = h('button', {
+    type: 'button', class: 'theme-card', 'data-theme': 'custom',
+    'aria-pressed': state.meta.themeId === 'custom' ? 'true' : 'false'
+  });
+  var cSw = h('span', { class: 'theme-swatch' });
+  cSw.appendChild(h('i', { style: { background: '#4f46e5' } }));
+  cSw.appendChild(h('i', { style: { background: '#a855f7' } }));
+  cSw.appendChild(h('i', { style: { background: '#ffffff' } }));
+  cBtn.appendChild(cSw);
+  cBtn.appendChild(h('span', { text: 'Custom' }));
+  cBtn.addEventListener('click', function () { selectTheme('custom'); });
+  themeCardEls['custom'] = cBtn;
+  grid.appendChild(cBtn);
+
+  /* Custom controls */
+  var c = state.meta.custom;
+  var panel = h('div', { class: 'custom-panel', id: 'customPanel' });
+  panel.appendChild(h('p', { class: 'hint', text: 'Tune the custom theme. Changes apply instantly.' }));
+
+  function colorField(label, key) {
+    var id = 'custom_' + key;
+    var f = h('div', { class: 'field' });
+    f.appendChild(h('label', { for: id, text: label }));
+    var inp = h('input', { type: 'color', id: id, class: 'custom-input', style: { padding: '4px', height: '36px' } });
+    inp.value = c[key];
+    inp.addEventListener('input', function () {
+      state.meta.custom[key] = inp.value;
+      onDataChange();
+      syncThemeUI();
+    });
+    f.appendChild(inp);
+    return f;
+  }
+
+  function selectField(label, key, options) {
+    var id = 'custom_' + key;
+    var f = h('div', { class: 'field' });
+    f.appendChild(h('label', { for: id, text: label }));
+    var sel = h('select', { id: id, class: 'custom-input' });
+    options.forEach(function (o) {
+      var opt = h('option', { value: o.v, text: o.t });
+      if (c[key] === o.v) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', function () {
+      state.meta.custom[key] = sel.value;
+      onDataChange();
+      syncThemeUI();
+    });
+    f.appendChild(sel);
+    return f;
+  }
+
+  panel.appendChild(h('div', { class: 'grid-2' },
+    colorField('Primary colour', 'primary'),
+    colorField('Secondary colour', 'secondary')
+  ));
+  panel.appendChild(h('div', { class: 'grid-2' },
+    colorField('Background', 'bg'),
+    colorField('Text colour', 'text')
+  ));
+  panel.appendChild(h('div', { class: 'grid-2' },
+    selectField('Font', 'font', [
+      { v: 'sans', t: 'System Sans' },
+      { v: 'serif', t: 'Serif' },
+      { v: 'humanist', t: 'Humanist Sans' },
+      { v: 'mono', t: 'Monospace' }
+    ]),
+    selectField('Layout', 'layout', [
+      { v: 'single', t: 'Single column' },
+      { v: 'sidebar', t: 'Sidebar' }
+    ])
+  ));
+  panel.appendChild(selectField('Divider style', 'divider', [
+    { v: 'bar', t: 'Accent bar' },
+    { v: 'thin', t: 'Thin rule' },
+    { v: 'dashed', t: 'Dashed rule' },
+    { v: 'plain', t: 'Plain rule' }
+  ]));
+
+  syncCustomPanelVisibility();
+
+  var list = h('div');
+  list.appendChild(grid);
+  list.appendChild(panel);
+
+  return card('theme', 'Choose Company-Inspired Resume Theme', [
+    h('p', {
+      class: 'hint',
+      text: 'Each theme re-styles the resume (colours, typography, header, dividers, cards and diagrams). Your content never changes.'
+    }),
+    list
+  ]);
+}
+
+function syncCustomPanelVisibility() {
+  var panel = $('#customPanel');
+  if (panel) panel.hidden = state.meta.themeId !== 'custom';
+}
+
+function selectTheme(id) {
+  state.meta.themeId = id;
+  syncThemeUI();
+  renderPreview();
+  saveResume(true);
+}
+
+function syncThemeUI() {
+  var id = state.meta.themeId;
+  Object.keys(themeCardEls).forEach(function (k) {
+    var el = themeCardEls[k];
+    if (el) el.setAttribute('aria-pressed', k === id ? 'true' : 'false');
+  });
+  var sel = $('#themeSelect');
+  if (sel) sel.value = id;
+  syncCustomPanelVisibility();
+}
+
+/* ---------- Builder assembly ---------- */
+var builderListCache = [];
+
+function renderBuilder() {
+  var host = $('#builderSections');
+  if (!host) return;
+  host.innerHTML = '';
+  themeCardEls = {};
+
+  if (!state.personal.name && !state.experience.length && !state.projects.length) {
+    host.appendChild(h('div', { class: 'note-banner' },
+      h('strong', { text: 'Getting started — ' }),
+      document.createTextNode('click “Load Sample Resume” in the top bar to see a complete example, or start filling the form below.')
+    ));
+  }
+
+  builderListCache = [
+    cardPersonal(),
+    cardSummary(),
+    cardSkills(),
+    cardExperience(),
+    cardEducation(),
+    cardProjects(),
+    simpleListCard('certifications', 'Certifications', 'certifications', 'e.g. AWS Certified Solutions Architect'),
+    simpleListCard('achievements', 'Achievements', 'achievements', 'e.g. Winner, National Hackathon (2023)'),
+    simpleListCard('publications', 'Publications (optional)', 'publications', 'e.g. Paper title — Journal, Year'),
+    simpleListCard('languages', 'Languages (optional)', 'languages', 'e.g. English — Professional'),
+    cardCustom(),
+    cardTheme()
+  ];
+
+  builderListCache.forEach(function (c) { host.appendChild(c); });
+  renderBuilderNav();
+  syncThemeUI();
+}
+
+function renderBuilderNav() {
+  var nav = $('#builderNav');
+  if (!nav) return;
+  nav.innerHTML = '';
+  SECTION_NAV.forEach(function (s) {
+    var b = h('button', { type: 'button', class: 'nav-chip', text: s.label });
+    b.addEventListener('click', function () {
+      var target = document.getElementById('sec-' + s.id);
+      var pane = document.getElementById('builderPane');
+      if (!target || !pane) return;
+      var top = target.offsetTop - pane.offsetTop - 52;
+      pane.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    });
+    nav.appendChild(b);
+  });
+}
+
+/* ---------- Image resize helper ---------- */
+function resizeImage(dataUrl, maxSize, cb) {
+  var img = new Image();
+  img.onload = function () {
+    var w = img.naturalWidth || img.width;
+    var h2 = img.naturalHeight || img.height;
+    if (!w || !h2) { cb(dataUrl); return; }
+    var scale = Math.min(1, maxSize / Math.max(w, h2));
+    var tw = Math.max(1, Math.round(w * scale));
+    var th = Math.max(1, Math.round(h2 * scale));
+    var canvas = document.createElement('canvas');
+    canvas.width = tw;
+    canvas.height = th;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) { cb(dataUrl); return; }
+    ctx.drawImage(img, 0, 0, tw, th);
+    try { cb(canvas.toDataURL('image/jpeg', 0.88)); }
+    catch (e) { cb(dataUrl); }
+  };
+  img.onerror = function () { cb(dataUrl); };
+  img.src = dataUrl;
+}
+
+/* ============================================================================
+   6. RESUME RENDERING
+   ========================================================================== */
+
+function buildCustomTheme() {
+  var c = state.meta.custom;
+  var fonts = { sans: SANS, serif: SERIF, mono: MONO, humanist: HUMANIST };
+  var bg = c.bg || '#ffffff';
+  var text = c.text || '#151a24';
+  var primary = c.primary || '#4f46e5';
+  var secondary = c.secondary || '#111827';
+  var dark = luminance(bg) < 0.5;
+
+  return {
+    name: 'Custom',
+    layout: c.layout === 'sidebar' ? 'sidebar' : 'single',
+    header: 'band',
+    divider: c.divider || 'bar',
+    radius: '8px',
+    font: fonts[c.font] || SANS,
+    vars: {
+      bg: bg,
+      text: text,
+      surface: dark ? shade(bg, 10) : shade(bg, -4),
+      muted: dark ? shade(text, -34) : shade(text, 36),
+      accent: primary,
+      accent2: dark ? shade(text, -8) : secondary,
+      border: dark ? shade(bg, 20) : shade(bg, -12),
+      headerBg: dark ? shade(bg, 8) : secondary,
+      headerText: contrastText(dark ? shade(bg, 8) : secondary),
+      chipBg: dark ? shade(primary, -70) : shade(primary, 88),
+      chipText: dark ? shade(primary, 35) : shade(primary, -38)
+    }
+  };
+}
+
+function activeTheme() {
+  if (state.meta.themeId === 'custom') return buildCustomTheme();
+  return THEMES[state.meta.themeId] || THEMES.amazon;
+}
+
+function applyTheme(el, t) {
+  var v = t.vars;
+  var map = {
+    '--r-bg': v.bg, '--r-surface': v.surface, '--r-text': v.text, '--r-muted': v.muted,
+    '--r-accent': v.accent, '--r-accent2': v.accent2, '--r-border': v.border,
+    '--r-header-bg': v.headerBg, '--r-header-text': v.headerText,
+    '--r-chip-bg': v.chipBg, '--r-chip-text': v.chipText,
+    '--r-font': t.font, '--r-radius': t.radius
+  };
+  Object.keys(map).forEach(function (k) { el.style.setProperty(k, map[k]); });
+  el.dataset.layout = t.layout;
+  el.dataset.header = t.header;
+  el.dataset.divider = t.divider;
+  if (t.flag) el.dataset.flag = t.flag;
+  else el.removeAttribute('data-flag');
+}
+
+/* ---------- Header ---------- */
+function addContactRow(container, iconName, text, url, isAts) {
+  if (!hasText(text) && !url) return;
+  var display = text || prettyUrl(url);
+
+  if (isAts) {
+    container.appendChild(h('span', { class: 'r-contact-plain', text: display }));
+    return;
+  }
+  var child;
+  if (url) {
+    child = h('a', {
+      class: 'r-contact', href: url,
+      target: /^https?:/i.test(url) ? '_blank' : null,
+      rel: /^https?:/i.test(url) ? 'noopener noreferrer' : null
+    });
+  } else {
+    child = h('span', { class: 'r-contact' });
+  }
+  child.appendChild(svgIcon(iconName, 13));
+  child.appendChild(h('span', { text: display }));
+  container.appendChild(child);
+}
+
+function buildHeader(d, t) {
+  var p = d.personal;
+  var isAts = d.meta.ats === true;
+  var header = h('header', { class: 'r-header' });
+  var inner = h('div', { class: 'r-head-inner' });
+
+  var left = h('div', { class: 'r-head-left' });
+  if (!isAts && p.photo) {
+    left.appendChild(h('img', { class: 'r-photo', src: p.photo, alt: '' }));
+  }
+  var nameBox = h('div', { class: 'r-namebox' });
+  nameBox.appendChild(h('h1', { class: 'r-name', text: p.name || 'Your Name' }));
+  if (hasText(p.title)) nameBox.appendChild(h('p', { class: 'r-title', text: p.title }));
+  left.appendChild(nameBox);
+  inner.appendChild(left);
+
+  var right = h('div', { class: 'r-head-right' });
+  var contacts = h('div', { class: 'r-contacts' });
+
+  addContactRow(contacts, 'mail', p.email, p.email ? 'mailto:' + p.email : '', isAts);
+  addContactRow(contacts, 'phone', p.phone, p.phone ? 'tel:' + p.phone.replace(/[^\d+]/g, '') : '', isAts);
+  addContactRow(contacts, 'pin', p.location, '', isAts);
+  addContactRow(contacts, 'linkedin', prettyUrl(p.linkedin), sanitizeUrl(p.linkedin), isAts);
+  addContactRow(contacts, 'github', prettyUrl(p.github), sanitizeUrl(p.github), isAts);
+  addContactRow(contacts, 'globe', prettyUrl(p.portfolio), sanitizeUrl(p.portfolio), isAts);
+
+  right.appendChild(contacts);
+  inner.appendChild(right);
+  header.appendChild(inner);
+  return header;
+}
+
+/* ---------- Section helpers ---------- */
+function sectionShell(title, children) {
+  var sec = h('section', { class: 'r-section' });
+  if (title) sec.appendChild(h('h2', { class: 'r-h2', text: title }));
+  children.filter(Boolean).forEach(function (c) { sec.appendChild(c); });
+  return sec;
+}
+
+function bullets(list, plain) {
+  if (!list.length) return null;
+  var ul = h('ul', { class: 'r-ul' + (plain ? ' r-list-plain' : '') });
+  list.forEach(function (l) { ul.appendChild(h('li', { text: l })); });
+  return ul;
+}
+
+/* ---------- Summary ---------- */
+function renderSummary(d) {
+  if (!hasText(d.summary)) return null;
+  var paras = lines(d.summary);
+  if (!paras.length) return null;
+  return sectionShell('Professional Summary', paras.map(function (line) {
+    return h('p', { class: 'r-para', text: line });
+  }));
+}
+
+/* ---------- Smart skill grouping ---------- */
+function detectCategoryForSkill(skill) {
+  var key = String(skill || '').trim().toLowerCase();
+  if (!key) return null;
+  if (TECH_BY_LABEL[key]) return TECH_BY_LABEL[key].group;
+  var found = null;
+  TECH_DICT.forEach(function (t) {
+    if (found) return;
+    if (t.re.test(key)) found = t.group;
+  });
+  return found;
+}
+
+function smartGroupSkills(skills) {
+  var out = {};
+  SKILL_CATEGORIES.forEach(function (c) { out[c] = []; });
+
+  Object.keys(skills).forEach(function (cat) {
+    var arr = skills[cat] || [];
+    arr.forEach(function (raw) {
+      var skill = String(raw || '').trim();
+      if (!skill) return;
+      var target = cat;
+
+      /* Only re-classify entries the user left in "Other" or an unknown bucket. */
+      if (cat === 'Other' || !out[cat]) {
+        var detected = detectCategoryForSkill(skill);
+        if (detected) target = detected;
+      }
+      if (!out[target]) out[target] = [];
+      if (out[target].indexOf(skill) === -1) out[target].push(skill);
+    });
+  });
+
+  Object.keys(out).forEach(function (k) {
+    if (!out[k].length) delete out[k];
+  });
+  return out;
+}
+
+/* ---------- Skills ---------- */
+function renderSkills(d) {
+  var groups = smartGroupSkills(d.skills);
+  var keys = Object.keys(groups);
+  if (!keys.length) return null;
+
+  var isAts = d.meta.ats === true;
+  var children = [];
+
+  if (isAts) {
+    keys.forEach(function (k) {
+      children.push(h('p', { class: 'ats-line' },
+        h('strong', { text: k + ': ' }),
+        document.createTextNode(groups[k].join(', '))
+      ));
+    });
+  } else {
+    var list = h('div', { class: 'skill-list' });
+    keys.forEach(function (k) {
+      var row = h('div', { class: 'skill-row' });
+      row.appendChild(h('span', { class: 'skill-cat', text: k }));
+      var chips = h('div', { class: 'skill-chips' });
+      groups[k].forEach(function (s) { chips.appendChild(h('span', { class: 'skill-chip', text: s })); });
+      row.appendChild(chips);
+      list.appendChild(row);
+    });
+    children.push(list);
+  }
+
+  return sectionShell('Technical Skills', children);
+}
+
+/* ---------- Experience ---------- */
+function renderExperience(d) {
+  var items = d.experience.filter(function (e) {
+    return e && (hasText(e.company) || hasText(e.title) || hasText(e.description));
+  });
+  if (!items.length) return null;
+
+  var children = items.map(function (e) {
+    var item = h('div', { class: 'r-item exp-item' });
+    var head = h('div', { class: 'r-item-head' });
+    var left = h('div', { class: 'r-item-left' });
+    if (hasText(e.title)) left.appendChild(h('h3', { class: 'r-h3', text: e.title }));
+    if (hasText(e.company) || hasText(e.location)) {
+      left.appendChild(h('div', {
+        class: 'r-org',
+        text: [e.company, e.location].filter(hasText).join(' · ')
+      }));
+    }
+    head.appendChild(left);
+
+    var range = dateRange(e.start, e.end, e.current);
+    if (range) {
+      var right = h('div', { class: 'r-item-right' });
+      right.appendChild(h('span', { class: 'r-date', text: range }));
+      head.appendChild(right);
+    }
+    item.appendChild(head);
+
+    lines(e.description).forEach(function (l) {
+      item.appendChild(h('p', { class: 'r-para', text: l }));
+    });
+
+    var b = bullets(lines(e.achievements));
+    if (b) item.appendChild(b);
+
+    var techs = splitCommas(e.technologies);
+    if (techs.length && d.meta.ats !== true) {
+      var row = h('div', { class: 'r-tech' });
+      row.appendChild(h('span', { class: 'r-tech-label', text: 'Tech' }));
+      techs.forEach(function (tx) { row.appendChild(h('span', { class: 'r-tech-item', text: tx })); });
+      item.appendChild(row);
+    } else if (techs.length) {
+      item.appendChild(h('p', { class: 'ats-line' },
+        h('strong', { text: 'Technologies: ' }),
+        document.createTextNode(techs.join(', '))
+      ));
+    }
+
+    return item;
+  });
+
+  return sectionShell('Work Experience', children);
+}
+
+/* ---------- Projects ---------- */
+function renderProjects(d) {
+  var items = d.projects.filter(function (p) {
+    return p && (hasText(p.name) || hasText(p.description));
+  });
+  if (!items.length) return null;
+
+  var children = items.map(function (p) {
+    var item = h('div', { class: 'r-item proj-item' });
+    var head = h('div', { class: 'r-item-head' });
+    var left = h('div', { class: 'r-item-left' });
+    left.appendChild(h('h3', { class: 'r-h3', text: p.name || 'Project' }));
+
+    var techs = splitCommas(p.technologies);
+    if (techs.length) left.appendChild(h('div', { class: 'r-org', text: techs.join(' · ') }));
+    head.appendChild(left);
+
+    if (hasText(p.url)) {
+      var url = sanitizeUrl(p.url);
+      if (url) {
+        var right = h('div', { class: 'r-item-right' });
+        right.appendChild(h('a', {
+          class: 'r-link', href: url, target: '_blank', rel: 'noopener noreferrer',
+          text: prettyUrl(p.url)
+        }));
+        head.appendChild(right);
+      }
+    }
+    item.appendChild(head);
+
+    lines(p.description).forEach(function (l) {
+      item.appendChild(h('p', { class: 'r-para', text: l }));
+    });
+
+    if (hasText(p.architecture)) {
+      item.appendChild(h('p', { class: 'r-para' },
+        h('strong', { text: 'Architecture: ' }),
+        document.createTextNode(p.architecture.trim())
+      ));
+    }
+
+    var b = bullets(lines(p.contributions));
+    if (b) item.appendChild(b);
+
+    return item;
+  });
+
+  return sectionShell('Technical Projects', children);
+}
+
+/* ---------- Education ---------- */
+function renderEducation(d) {
+  var items = d.education.filter(function (e) {
+    return e && (hasText(e.degree) || hasText(e.university));
+  });
+  if (!items.length) return null;
+
+  var children = items.map(function (e) {
+    var item = h('div', { class: 'r-item edu-item' });
+    var head = h('div', { class: 'r-item-head' });
+    var left = h('div', { class: 'r-item-left' });
+    if (hasText(e.degree)) left.appendChild(h('h3', { class: 'r-h3', text: e.degree }));
+    if (hasText(e.university) || hasText(e.location)) {
+      left.appendChild(h('div', {
+        class: 'r-org',
+        text: [e.university, e.location].filter(hasText).join(' · ')
+      }));
+    }
+    head.appendChild(left);
+
+    var range = dateRange(e.startYear, e.endYear, false);
+    if (range || hasText(e.gpa)) {
+      var right = h('div', { class: 'r-item-right' });
+      if (range) right.appendChild(h('span', { class: 'r-date', text: range }));
+      if (hasText(e.gpa)) {
+        right.appendChild(h('div', { class: 'r-date', style: { marginTop: '2px' }, text: e.gpa }));
+      }
+      head.appendChild(right);
+    }
+    item.appendChild(head);
+
+    if (hasText(e.coursework)) {
+      item.appendChild(h('p', { class: 'r-para' },
+        h('strong', { text: 'Relevant Coursework: ' }),
+        document.createTextNode(e.coursework.trim())
+      ));
+    }
+    return item;
+  });
+
+  return sectionShell('Education', children);
+}
+
+/* ---------- Simple list sections ---------- */
+function renderSimpleSection(title, arr, plain) {
+  var items = (arr || []).map(function (s) { return String(s || '').trim(); }).filter(Boolean);
+  if (!items.length) return null;
+  return sectionShell(title, [bullets(items, plain)]);
+}
+
+/* ---------- Custom sections ---------- */
+function renderCustomSections(d) {
+  return d.custom.map(function (cs) {
+    if (!cs || !hasText(cs.title)) return null;
+    var items = lines(cs.content);
+    if (!items.length) return null;
+    var children = items.map(function (l) { return h('p', { class: 'r-para', text: l }); });
+    return sectionShell(cs.title.trim(), children);
+  }).filter(Boolean);
+}
+
+/* ---------- Body layout ---------- */
+function buildBody(d, t) {
+  var body = h('div', { class: 'r-body' });
+
+  var S = {
+    summary:      renderSummary(d),
+    skills:       renderSkills(d),
+    tech:         d.meta.ats ? null : renderTechnologyEcosystem(d),
+    experience:   renderExperience(d),
+    projects:     renderProjects(d),
+    education:    renderEducation(d),
+    certs:        renderSimpleSection('Certifications', d.certifications, true),
+    achievements: renderSimpleSection('Achievements', d.achievements, false),
+    publications: renderSimpleSection('Publications', d.publications, true),
+    languages:    renderSimpleSection('Languages', d.languages, true),
+    custom:       renderCustomSections(d)
+  };
+
+  if (t.layout === 'sidebar') {
+    var side = h('div', { class: 'r-col r-side' });
+    var main = h('div', { class: 'r-col r-main' });
+
+    [S.skills, S.education, S.certs, S.languages].forEach(function (n) {
+      if (n) side.appendChild(n);
+    });
+    [S.summary, S.tech, S.experience, S.projects, S.achievements, S.publications]
+      .concat(S.custom)
+      .forEach(function (n) { if (n) main.appendChild(n); });
+
+    if (!side.children.length) {
+      body.classList.add('r-body-single');
+      var merged = h('div', { class: 'r-col r-main' });
+      [S.summary, S.tech, S.experience, S.projects, S.achievements, S.publications]
+        .concat(S.custom)
+        .forEach(function (n) { if (n) merged.appendChild(n); });
+      body.appendChild(merged);
+    } else {
+      body.appendChild(side);
+      body.appendChild(main);
+    }
+  } else {
+    var single = h('div', { class: 'r-col r-main' });
+    [S.summary, S.tech, S.skills, S.experience, S.projects, S.education,
+     S.certs, S.achievements, S.publications, S.languages]
+      .concat(S.custom)
+      .forEach(function (n) { if (n) single.appendChild(n); });
+    body.appendChild(single);
+  }
+
+  return body;
+}
+
+/* ---------- Full resume ---------- */
+function buildResume(d) {
+  var t = d.meta.ats ? ATS_THEME : activeTheme();
+  var root = h('div', { class: 'resume' });
+  applyTheme(root, t);
+  root.appendChild(buildHeader(d, t));
+  root.appendChild(buildBody(d, t));
+  return root;
+}
+
+function renderPreview() {
+  var host = $('#resumeHost');
+  if (!host) return;
+  var node = buildResume(state);
+  host.innerHTML = '';
+  host.appendChild(node);
+}
+
+/* ============================================================================
+   7. TECHNOLOGY DETECTION & DIAGRAMS
+   ========================================================================== */
+
+function collectText(d) {
+  var parts = [];
+  parts.push(d.summary || '');
+  Object.keys(d.skills || {}).forEach(function (k) {
+    parts.push((d.skills[k] || []).join(' '));
+  });
+  (d.experience || []).forEach(function (e) {
+    parts.push(e.title, e.company, e.description, e.achievements, e.technologies);
+  });
+  (d.projects || []).forEach(function (p) {
+    parts.push(p.name, p.description, p.technologies, p.architecture, p.contributions);
+  });
+  (d.education || []).forEach(function (e) { parts.push(e.degree, e.coursework); });
+  parts.push((d.certifications || []).join(' '));
+  parts.push((d.achievements || []).join(' '));
+  (d.custom || []).forEach(function (c) { parts.push(c.title, c.content); });
+  return parts.filter(Boolean).join(' \n ');
+}
+
+/** Detect only technologies the user actually entered. */
+function detectTechnologies(d) {
+  var hay = collectText(d);
+  if (!hay.trim()) return [];
+  var found = [];
+  TECH_DICT.forEach(function (entry) {
+    if (entry.re.test(hay)) found.push(entry);
+  });
+  return found;
+}
+
+/** Build the technology ecosystem section for the current resume. */
+function renderTechnologyEcosystem(d) {
+  var det = detectTechnologies(d);
+  if (!det.length) return null;
+
+  var sec = h('section', { class: 'r-section' });
+  sec.appendChild(h('h2', { class: 'r-h2', text: 'Technology Ecosystem' }));
+  sec.appendChild(h('p', {
+    class: 'r-note',
+    text: 'Generated from the technologies listed in this resume.'
+  }));
+
+  var groups = {};
+  det.forEach(function (t) {
+    if (!groups[t.group]) groups[t.group] = [];
+    if (groups[t.group].indexOf(t.label) === -1) groups[t.group].push(t.label);
+  });
+
+  var list = h('div', { class: 'skill-list' });
+  Object.keys(groups).forEach(function (g) {
+    var row = h('div', { class: 'skill-row' });
+    row.appendChild(h('span', { class: 'skill-cat', text: g }));
+    var chips = h('div', { class: 'skill-chips' });
+    groups[g].forEach(function (label) {
+      chips.appendChild(h('span', { class: 'skill-chip', text: label }));
+    });
+    row.appendChild(chips);
+    list.appendChild(row);
+  });
+  sec.appendChild(list);
+
+  var diagram = buildArchitecture(d, det);
+  if (diagram) sec.appendChild(diagram);
+
+  return sec;
+}
+
+/** Build the small, responsive architecture diagram. */
+function buildArchitecture(d, det) {
+  var keys = {};
+  det.forEach(function (t) { keys[t.key] = t.label; });
+  var has = function (k) { return Object.prototype.hasOwnProperty.call(keys, k); };
+  var firstOf = function (list) {
+    for (var i = 0; i < list.length; i++) { if (has(list[i])) return keys[list[i]]; }
+    return null;
+  };
+
+  var steps = null;
+
+  /* --- RAG pipeline --- */
+  if (has('rag') || has('langchain') || has('embeddings') || has('vectordb') || has('llm')) {
+    var embeddingModel = firstOf(['openai', 'azureoai', 'gemini', 'huggingface', 'bedrock']) || 'Embedding Model';
+    var vectorStore = firstOf(['vectordb', 'elastic', 'postgres', 'mongodb']) || 'Vector Store';
+    var llm = firstOf(['llm', 'gpt', 'openai', 'azureoai', 'gemini', 'bedrock']) || 'LLM';
+
+    steps = [
+      { label: 'Documents' },
+      { label: 'Chunking' },
+      { label: embeddingModel, note: 'embeddings' },
+      { label: vectorStore },
+      { label: 'Retriever', branches: [keys['rag'] ? 'RAG' : null, keys['langchain'] || null].filter(Boolean) },
+      { label: llm },
+      { label: 'Application' }
+    ];
+  }
+
+  /* --- Machine-learning pipeline --- */
+  if (!steps && (has('pytorch') || has('tensorflow') || has('keras') || has('sklearn') || has('cnn') || has('lstm') || has('gan') || has('dl') || has('ml'))) {
+    var framework = firstOf(['pytorch', 'tensorflow', 'keras', 'sklearn']) || 'Model';
+    steps = [
+      { label: 'Data' },
+      { label: 'Preprocessing' },
+      { label: framework, note: 'training' },
+      { label: 'Evaluation' },
+      { label: 'Prediction' }
+    ];
+  }
+
+  /* --- Microservices --- */
+  if (!steps && (has('microsvc') || has('kubernetes') || has('kafka') || has('graphql') || has('grpc'))) {
+    var backendTechs = ['fastapi', 'webapi', 'dotnet', 'flask', 'django', 'spring', 'nodejs', 'expressjs']
+      .filter(has).map(function (k) { return keys[k]; });
+    var dataTechs = ['mongodb', 'sqlserver', 'postgres', 'mysql', 'cassandra', 'dynamodb', 'cosmosdb', 'redis', 'kafka']
+      .filter(has).map(function (k) { return keys[k]; });
+    var runtime = firstOf(['kubernetes', 'ecs', 'eks', 'aks', 'gke', 'openshift']);
+
+    steps = [
+      { label: 'Client' },
+      { label: firstOf(['apigw', 'restapi', 'graphql', 'grpc']) || 'API Gateway' },
+      {
+        label: has('microsvc') ? 'Microservices' : 'Services',
+        branches: backendTechs.slice(0, 4)
+      }
+    ];
+    if (runtime) steps.push({ label: runtime, note: 'runtime' });
+    if (dataTechs.length) steps.push({ label: 'Data Stores', branches: dataTechs.slice(0, 4) });
+    else steps.push({ label: 'Data Stores' });
+  }
+
+  /* --- Cloud-native --- */
+  if (!steps && (has('aws') || has('azure') || has('gcp') || has('s3') || has('lambda') || has('cloudrun') ||
+                 has('azfunc') || has('ec2') || has('firebase') || has('cloudstorage'))) {
+    var compute = firstOf(['lambda', 'azfunc', 'cloudrun', 'ec2', 'ecs', 'eks', 'aks', 'gke', 'appinsights']) || 'Compute';
+    var storage = firstOf(['s3', 'blob', 'cloudstorage']);
+    var db2 = firstOf(['dynamodb', 'cosmosdb', 'azuresql', 'rds', 'sqlserver', 'postgres', 'mysql', 'mongodb', 'bigquery', 'snowflake']);
+    var apiLayer = firstOf(['apigw', 'webapi', 'fastapi', 'flask', 'nodejs', 'expressjs', 'restapi']) || 'API Layer';
+
+    steps = [
+      { label: 'User' },
+      { label: apiLayer },
+      { label: compute }
+    ];
+    var cloudBranches = [];
+    if (storage) cloudBranches.push(keys[storage]);
+    if (db2) cloudBranches.push(keys[db2]);
+    if (has('sqs')) cloudBranches.push(keys['sqs']);
+    if (has('sns')) cloudBranches.push(keys['sns']);
+    if (cloudBranches.length) steps[2].branches = cloudBranches.slice(0, 4);
+    var obs = firstOf(['cloudwatch', 'appinsights', 'grafana', 'prometheus']);
+    if (obs) steps.push({ label: obs, note: 'observability' });
+  }
+
+  /* --- Classic backend --- */
+  if (!steps && (has('webapi') || has('fastapi') || has('flask') || has('django') || has('nodejs') ||
+                 has('expressjs') || has('spring') || has('dotnet') || has('restapi'))) {
+    var api = firstOf(['webapi', 'fastapi', 'flask', 'django', 'expressjs', 'nodejs', 'spring', 'dotnet', 'restapi']);
+    var db3 = firstOf(['sqlserver', 'postgres', 'mysql', 'mongodb', 'dynamodb', 'cosmosdb', 'oracledb', 'sqlite', 'redis']);
+    var client = firstOf(['angular', 'react', 'vue', 'nextjs']);
+
+    steps = [
+      { label: client || 'Client' },
+      { label: api },
+      { label: 'Service Layer' }
+    ];
+    if (db3) steps.push({ label: keys[db3], note: 'data' });
+  }
+
+  if (!steps || steps.length < 2) return null;
+
+  return diagramNode('Architecture Overview', steps);
+}
+
+/** Render a compact, fully responsive architecture diagram (never overlaps text). */
+function diagramNode(title, steps) {
+  var box = h('div', {
+    class: 'diagram',
+    role: 'img',
+    'aria-label': title + ': ' + steps.map(function (s) { return s.label; }).join(' to ')
+  });
+  box.appendChild(h('div', { class: 'dg-title', text: title }));
+
+  var flow = h('div', { class: 'dg-flow' });
+  steps.forEach(function (s, i) {
+    var node = h('div', { class: 'dg-node' });
+    node.appendChild(h('span', { text: s.label }));
+    if (s.note) node.appendChild(h('span', { class: 'dg-note', text: '· ' + s.note }));
+    flow.appendChild(node);
+
+    if (s.branches && s.branches.length) {
+      var br = h('div', { class: 'dg-branches' });
+      s.branches.forEach(function (b) {
+        if (!b) return;
+        br.appendChild(h('span', { class: 'dg-branch', text: '↳ ' + b }));
+      });
+      if (br.children.length) flow.appendChild(br);
+    }
+
+    if (i < steps.length - 1) flow.appendChild(h('div', { class: 'dg-arrow', text: '↓' }));
+  });
+
+  box.appendChild(flow);
+  return box;
+}
+
+/* ============================================================================
+   8. VALIDATION, EXPORT, EVENTS & BOOTSTRAP
+   ========================================================================== */
+
+function validateForm() {
+  var problems = [];
+  var p = state.personal;
+
+  if (!hasText(p.name)) problems.push('Full Name is required.');
+  if (!hasText(p.title)) problems.push('Professional Title is required.');
+
+  if (hasText(p.email) && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email.trim())) {
+    problems.push('Email address does not look valid.');
+  }
+  ['linkedin', 'github', 'portfolio'].forEach(function (k) {
+    if (hasText(p[k]) && !sanitizeUrl(p[k])) {
+      problems.push(p[k] + ' is not a valid URL.');
+    }
+  });
+  (state.experience || []).forEach(function (e, i) {
+    if (hasText(e.start) && hasText(e.end) && !e.current) {
+      var ys = parseInt(String(e.start).match(/\d{4}/), 10);
+      var ye = parseInt(String(e.end).match(/\d{4}/), 10);
+      if (!isNaN(ys) && !isNaN(ye) && ye < ys) {
+        problems.push('Experience #' + (i + 1) + ': end date is earlier than start date.');
+      }
+    }
+  });
+  return problems;
+}
+
+function printResume() {
+  var problems = validateForm();
+  if (problems.length) {
+    toast(problems[0] + (problems.length > 1 ? ' (+' + (problems.length - 1) + ' more)' : ''));
+    return;
+  }
+  window.print();
+}
+
+function downloadHTML() {
+  var host = $('#resumeHost');
+  var node = host ? host.firstElementChild : null;
+  if (!node) { toast('Nothing to download yet.'); return; }
+
+  var resumeCss = document.getElementById('resumeCss');
+  var css = resumeCss ? resumeCss.textContent : '';
+  var name = (state.personal.name || 'Resume').replace(/[^\w\s-]/g, '').trim() || 'Resume';
+
+  var docCss = [
+    'html,body{margin:0;padding:0;background:#eef1f6;}',
+    'body{padding:24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}',
+    '.resume{margin:0 auto;}',
+    '@media print{@page{size:A4;margin:10mm;}',
+    'html,body{background:#fff;padding:0;}',
+    '.resume{box-shadow:none !important;border-radius:0 !important;max-width:none !important;width:100% !important;}',
+    '.r-section,.r-item,.exp-item,.proj-item,.edu-item,.diagram,.r-header{break-inside:avoid;page-break-inside:avoid;}',
+    '*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}}'
+  ].join('\n');
+
+  var html =
+    '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8" />\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1" />\n' +
+    '<title>' + esc(name) + ' — Resume</title>\n' +
+    '<style>\n' + css + '\n' + docCss + '\n</style>\n</head>\n<body>\n' +
+    node.outerHTML +
+    '\n</body>\n</html>';
+
+  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = name.replace(/\s+/g, '_') + '_resume.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  toast('Resume HTML downloaded.');
+}
+
+/* ---------- Sample data ---------- */
+function sampleState() {
+  var s = emptyState();
+  s.meta.themeId = 'deloitte';
+
+  s.personal = {
+    name: 'Ravula Tanishq',
+    title: 'Software Development Engineer',
+    email: 'tanishqravula@gmail.com',
+    phone: '+91 7702337176',
+    location: 'Hyderabad, India',
+    linkedin: 'https://www.linkedin.com/in/tanishq-tanishq-892917241',
+    github: 'https://github.com/tanishqravula',
+    portfolio: 'https://comfy-chaja-e5044a.netlify.app/',
+    photo: ''
+  };
+
+  s.summary = [
+    'Software Development Engineer with 2 years at Deloitte building distributed, production-grade systems that process thousands of documents per hour for multibillion-dollar tax reporting workloads.',
+    'Proven ability to design scalable backend services (.NET Web API, FastAPI), optimize high-traffic data stores (SQL Server, 35% latency reduction), and ship retrieval-augmented AI systems end-to-end — from embedding pipelines to production deployment.',
+    'Strong foundation in Data Structures & Algorithms, OCR/ML automation, and full-stack development (C#, Angular, Python). Two Deloitte performance awards in a single year.'
+  ].join('\n');
+
+  s.skills = {
+    'Programming Languages': ['Python', 'C#', 'Java', 'C++', 'JavaScript', 'TypeScript', 'SQL'],
+    'Backend': ['.NET Web API', 'FastAPI', 'Flask', 'REST API design', 'Async/parallel processing'],
+    'Frontend': ['Angular', 'ReactJS', 'Redux', 'HTML', 'CSS'],
+    'Databases': ['SQL Server', 'MongoDB', 'MySQL'],
+    'Cloud': ['Azure', 'Azure OpenAI', 'Microsoft AI Foundry', 'Azure Monitoring'],
+    'AI / ML': ['LLMs', 'RAG', 'LangChain', 'NLP', 'Deep Learning', 'PyTorch', 'Keras', 'OCR', 'Abbyy FlexiCapture'],
+    'DevOps': ['Docker', 'Kubernetes', 'CI/CD'],
+    'Frameworks': ['LangChain', 'Streamlit'],
+    'Tools': ['KQL', 'Git', 'GitHub', 'OpenXML'],
+    'Other': ['Data Structures & Algorithms', 'DBMS', 'OOP']
+  };
+
+  s.experience = [
+    {
+      company: 'Deloitte',
+      title: 'Software Developer II',
+      location: 'Hyderabad, India',
+      start: 'June 2026',
+      end: '',
+      current: true,
+      description: 'Promoted to Software Developer II for sustained high-impact delivery; own backend services and AI infrastructure powering tax & legal workflows used across the practice.',
+      achievements: [
+        'Scaled backend services: engineered and optimized .NET Web API controllers powering high-traffic tax workflows, cutting API response times and improving reliability of data exchange across downstream systems.',
+        'Built real-time observability tooling: designed telemetry dashboards in Angular/TypeScript giving tax professionals live pipeline-status visibility, reducing time-to-detect for stuck or failed jobs.',
+        'Owned production reliability: integrated Azure Monitoring and KQL log queries to proactively surface system errors, reducing downtime and accelerating cross-environment debugging.',
+        'Database performance at scale: re-engineered SQL Server indexing and stored procedures, delivering a 35% reduction in query latency for high-traffic financial systems.',
+        'Improved production AI quality: advanced a RAG-based conversational AI chatbot through prompt refinement, passage re-ranking and a human-in-the-loop feedback loop, measurably improving answer consistency and accuracy.',
+        'Optimized retrieval latency: implemented parallel batch processing of embeddings, significantly cutting end-to-end latency for document-grounded question answering.',
+        'Shipped a production AI service: built and deployed a FastAPI backend orchestrating the full RAG retrieval-and-generation flow for low-latency, accurate responses to complex tax-form queries.'
+      ].join('\n'),
+      technologies: '.NET Web API, C#, Angular, TypeScript, SQL Server, Azure Monitoring, KQL, FastAPI, RAG, LangChain, Azure OpenAI'
+    },
+    {
+      company: 'Deloitte',
+      title: 'Software Developer I — Xtract-K1 Project',
+      location: 'Hyderabad, India',
+      start: 'Aug 2024',
+      end: 'May 2026',
+      current: false,
+      description: '',
+      achievements: [
+        "Built a high-throughput automation system: engineered 'Xtract-K1' in C#/.NET Core to process complex multi-schedule tax forms (1065, 1041, 1120S) for high-net-worth entity portfolios, scaling to thousands of documents processed per hour.",
+        'Drove measurable accuracy gains: integrated OCR APIs with Abbyy FlexiLayout/FlexiCapture to automate extraction from unstructured tax documents, achieving 98.5% accuracy and cutting manual data entry by 80%.',
+        'Built the human-in-the-loop review layer: developed an Angular/TypeScript frontend with real-time validation rules against SQL Server backends for reviewing and correcting extracted data.',
+        'Designed a data transformation engine: built a migration pipeline converting extracted JSON payloads into multi-sheet Excel financial templates via OpenXML, streamlining reporting cycles worth multiple billions of dollars.',
+        'Engineered for throughput: implemented asynchronous processing in .NET Web API controllers, enabling the system to handle thousands of documents per hour without degraded latency.',
+        'Turned regulation into code: partnered with tax subject-matter experts to translate complex IRS regulations into executable C# validation logic, achieving 100% compliance with federal reporting standards.',
+        'Operational monitoring at scale: used Azure Monitoring and KQL to track document-batch processing and exceptions across production systems.',
+        "Built the org's first production RAG chatbot: designed a Retrieval-Augmented Generation pipeline with LangChain and Azure OpenAI embeddings on Microsoft AI Foundry, enabling forms-based Q&A directly over tax documents.",
+        'Deployed and integrated it end-to-end: shipped the chatbot backend on FastAPI, connecting the RAG pipeline into production document workflows and improving turnaround time for query resolution.'
+      ].join('\n'),
+      technologies: 'C#, .NET Core, OCR API, Abbyy FlexiCapture, Abbyy FlexiLayout, Angular, TypeScript, SQL Server, OpenXML, Azure Monitoring, KQL, LangChain, Azure OpenAI, Microsoft AI Foundry, FastAPI'
+    }
+  ];
+
+  s.education = [
+    {
+      degree: 'B.E. Computer Science and Engineering',
+      university: 'Vasavi College of Engineering',
+      location: 'Hyderabad, India',
+      startYear: '2020',
+      endYear: '2024',
+      gpa: 'CGPA: 9.2',
+      coursework: 'Data Structures & Algorithms, DBMS, Operating Systems, Object-Oriented Programming, Machine Learning'
+    },
+    {
+      degree: 'Class XII',
+      university: 'Sri Chaitanya Techno School',
+      location: 'Hyderabad, India',
+      startYear: '',
+      endYear: '2020',
+      gpa: '90%',
+      coursework: ''
+    },
+    {
+      degree: 'Class X',
+      university: 'Sri Chaitanya Techno School',
+      location: 'Hyderabad, India',
+      startYear: '',
+      endYear: '2018',
+      gpa: '90%',
+      coursework: ''
+    }
+  ];
+
+  s.projects = [
+    {
+      name: 'AI Mart: Agentic Bot',
+      description: 'Architected a multi-modal agentic bot in Python/LangChain that ingests and reasons over PDF, Excel, CSV, PPTX and DOCX inputs.',
+      technologies: 'Python, LLM, NLP, LangChain, Streamlit, Google API',
+      architecture: 'Document ingestion → chunking → embeddings → vector store → LangChain agent retrieval → LLM response',
+      contributions: [
+        'Implemented a RAG pipeline for context-aware Q&A, outperforming standard GPT-4 baselines on answer accuracy for domain documents.',
+        'Built multi-format document ingestion covering five file types behind a single conversational interface.'
+      ].join('\n'),
+      url: 'https://tanishqravulaultraaiagenticbot.onrender.com/'
+    },
+    {
+      name: 'Home-Based Healthcare Platform',
+      description: 'Built a full-stack healthcare platform with an ML model predicting disease onset at 85% accuracy from user-reported symptoms.',
+      technologies: 'Python, Machine Learning, MongoDB, Firebase, WebRTC',
+      architecture: 'Client → REST API → ML prediction service → MongoDB; WebRTC + Firebase for real-time consultation',
+      contributions: [
+        'Implemented real-time, low-latency doctor-patient video consultations using WebRTC and Firebase.',
+        'Trained and deployed a symptom-based disease-onset prediction model reaching 85% accuracy.'
+      ].join('\n'),
+      url: 'https://tanishqravula.github.io/tanishq/'
+    },
+    {
+      name: 'EcoAI Waste Manager',
+      description: "Built a CNN-based classifier sorting waste into 12 categories as the core of the 'EcoAI Assistant' platform.",
+      technologies: 'GenAI, Deep Learning, CNN, Google Gemini, Python',
+      architecture: 'Image input → CNN classifier → category → Gemini recommendation engine → impact report',
+      contributions: [
+        'Integrated Google Gemini to generate context-specific upcycling recommendations and environmental impact reports.',
+        'Trained a 12-class CNN waste classifier as the platform core.'
+      ].join('\n'),
+      url: 'https://tanishqravulawastemanagementrecommedersystem-2j3v6dupjzpt9lc3n.streamlit.app/'
+    },
+    {
+      name: 'Hydro Bot: Generative Design',
+      description: 'Smart India Hackathon (SIH) Grand Finalist: built a generative-AI toolkit for hydropower plant design.',
+      technologies: 'OpenAI, DALL-E3, PyTorch, Keras, LSTM, GANs',
+      architecture: 'Site parameters → LSTM forecast → GAN design generation → feasibility scoring',
+      contributions: [
+        'Built a predictive engine using Keras LSTM and PyTorch-based GANs to forecast optimal plant specifications and feasibility metrics.',
+        'Reached the Smart India Hackathon 2023 Grand Finale with the toolkit.'
+      ].join('\n'),
+      url: 'https://tanishqravulasihgrandfinale-n8acaufzqyq42uibpegcwr.streamlit.app/'
+    },
+    {
+      name: 'Affordable Fashion E-commerce',
+      description: 'Designed and deployed a scalable MERN-stack e-commerce platform for fashion retail and inventory management.',
+      technologies: 'ReactJS, NodeJS, MongoDB, Express, Redux, HTML5',
+      architecture: 'React/Redux SPA → Express REST API → MongoDB with inventory management',
+      contributions: [
+        'Implemented Redux for centralized state, keeping cart and catalog state consistent across concurrent sessions.',
+        'Deployed the full MERN stack with a responsive storefront and inventory management.'
+      ].join('\n'),
+      url: 'https://amazing-lollipop-e0dd4d.netlify.app/'
+    },
+    {
+      name: 'Professional Portfolio & Brand',
+      description: 'Built and optimized a portfolio site achieving a 98/100 Lighthouse performance score through modern build and asset optimization.',
+      technologies: 'HTML, CSS, JavaScript, GSAP, Netlify',
+      architecture: 'Static site → CDN delivery via Netlify',
+      contributions: [
+        'Achieved a 98/100 Lighthouse performance score through asset and build optimisation.'
+      ].join('\n'),
+      url: 'https://comfy-chaja-e5044a.netlify.app/'
+    },
+    {
+      name: 'Intelligent WhatsApp & Telegram Bot',
+      description: 'Built Flask-based automation bots with NLP-driven conversational logic across WhatsApp and Telegram.',
+      technologies: 'Python, Flask, NLP, LLM, Twilio API, Telegram API',
+      architecture: 'Messaging webhook → Flask service → NLP/LLM layer → third-party APIs → reply',
+      contributions: [
+        'Integrated Twilio and Telegram APIs for instant image generation, map navigation and real-time news updates.'
+      ].join('\n'),
+      url: ''
+    }
+  ];
+
+  s.certifications = [
+    'Introduction to Machine Learning — NPTEL (Silver Medalist)',
+    'Java Programming — Coding Ninjas',
+    'Python Data Structures — Coding Ninjas',
+    'Amazon ML Summer School Program — 2023'
+  ];
+
+  s.achievements = [
+    'Applause Award for exceptional performance, Q2 (performance year 2026), Deloitte.',
+    'Spot Award for exceptional performance, Q3 (performance year 2026), Deloitte.',
+    'Winner, National Hackathon Tech Savishkar (2023).',
+    'Winner, Code Sprint (2023).',
+    'Winner, Devpost Student Hacks AI Hackathon.',
+    'Smart India Hackathon (SIH) 2023 — Grand Finalist.',
+    '1st Prize, Project Expo, Methodist College of Engineering.'
+  ];
+
+  s.publications = [];
+  s.languages = ['English — Professional', 'Telugu — Native', 'Hindi — Conversational'];
+  s.custom = [];
+
+  return s;
+}
+
+/* ---------- Mode helpers ---------- */
+function setMode(mode) {
+  document.body.setAttribute('data-mode', mode);
+  if (mode === 'resume') document.body.setAttribute('data-mobile-view', 'preview');
+  var prev = $('#btnPreviewMode');
+  var edit = $('#btnEditMode');
+  if (prev) prev.disabled = (mode === 'resume');
+  if (edit) edit.disabled = (mode !== 'resume');
+}
+
+function setMobileView(view) {
+  document.body.setAttribute('data-mobile-view', view);
+  var tb = $('#tabBuilder');
+  var tp = $('#tabPreview');
+  if (tb) tb.classList.toggle('active', view === 'builder');
+  if (tp) tp.classList.toggle('active', view === 'preview');
+}
+
+/* ---------- Event wiring ---------- */
+function bindGlobalEvents() {
+
+  var btnSample = $('#btnSample');
+  if (btnSample) btnSample.addEventListener('click', function () {
+    state = sampleState();
+    renderBuilder();
+    renderPreview();
+    syncThemeUI();
+    onDataChange();
+    toast('Sample resume loaded — all of this is example data.');
+  });
+
+  var btnSave = $('#btnSave');
+  if (btnSave) btnSave.addEventListener('click', function () { saveResume(false); });
+
+  var btnLoad = $('#btnLoad');
+  if (btnLoad) btnLoad.addEventListener('click', function () { loadResume(false); });
+
+  var btnClear = $('#btnClear');
+  if (btnClear) btnClear.addEventListener('click', function () {
+    if (window.confirm('Clear all resume information and remove it from this browser?')) {
+      clearResume();
+    }
+  });
+
+  var btnGenerate = $('#btnGenerate');
+  if (btnGenerate) btnGenerate.addEventListener('click', function () {
+    var problems = validateForm();
+    if (problems.length) {
+      toast(problems.join(' '));
+      return;
+    }
+    setMode('resume');
+    renderPreview();
+    toast('Resume generated.');
+  });
+
+  var btnPreviewMode = $('#btnPreviewMode');
+  if (btnPreviewMode) btnPreviewMode.addEventListener('click', function () {
+    setMode('resume');
+    renderPreview();
+  });
+
+  var btnEditMode = $('#btnEditMode');
+  if (btnEditMode) btnEditMode.addEventListener('click', function () {
+    setMode('split');
+    setMobileView('builder');
+  });
+
+  var btnPrint = $('#btnPrint');
+  if (btnPrint) btnPrint.addEventListener('click', printResume);
+
+  var btnDownload = $('#btnDownload');
+  if (btnDownload) btnDownload.addEventListener('click', downloadHTML);
+
+  var atsToggle = $('#atsToggle');
+  if (atsToggle) {
+    atsToggle.checked = !!state.meta.ats;
+    atsToggle.addEventListener('change', function () {
+      state.meta.ats = atsToggle.checked;
+      renderPreview();
+      saveResume(true);
+      toast(atsToggle.checked
+        ? 'ATS-Friendly Mode ON — diagrams and decoration removed.'
+        : 'Visual theme mode ON.');
+    });
+  }
+
+  var themeSelect = $('#themeSelect');
+  if (themeSelect) {
+    Object.keys(THEMES).forEach(function (id) {
+      themeSelect.appendChild(h('option', { value: id, text: THEMES[id].name }));
+    });
+    themeSelect.appendChild(h('option', { value: 'custom', text: 'Custom' }));
+    themeSelect.value = state.meta.themeId;
+    themeSelect.addEventListener('change', function () {
+      selectTheme(themeSelect.value);
+    });
+  }
+
+  var tabBuilder = $('#tabBuilder');
+  if (tabBuilder) tabBuilder.addEventListener('click', function () { setMobileView('builder'); });
+
+  var tabPreview = $('#tabPreview');
+  if (tabPreview) tabPreview.addEventListener('click', function () { setMobileView('preview'); });
+
+  /* Keyboard shortcut: Ctrl/Cmd + P triggers the styled print path. */
+  window.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+      var problems = validateForm();
+      if (problems.length) {
+        e.preventDefault();
+        toast(problems[0]);
+      }
+    }
+  });
+}
+
+/* ---------- Bootstrap ---------- */
+function init() {
+  var loaded = loadResume(true);
+  if (!loaded) {
+    state = emptyState();
+  }
+
+  renderBuilder();
+  renderPreview();
+  syncThemeUI();
+  bindGlobalEvents();
+  setMode('split');
+  setMobileView('builder');
+
+  var atsToggle = $('#atsToggle');
+  if (atsToggle) atsToggle.checked = !!state.meta.ats;
+  var themeSelect = $('#themeSelect');
+  if (themeSelect) themeSelect.value = state.meta.themeId;
+
+  if (!loaded) {
+    toast('Welcome — start typing, or load the sample resume.');
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
